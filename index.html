@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>VapiCoin</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -26,8 +26,8 @@
   <!-- Karakter Bayi -->
   <div id="character-wrapper">
     <video id="baby-video" autoplay loop muted playsinline></video>
-  <audio id="laugh-sound" src="sounds/baby-laugh.mp3" preload="auto"></audio>
   </div>
+  <div id="sparkle-container"></div>
 
   <!-- XP Bar -->
   <div id="status-bar">
@@ -37,7 +37,7 @@
     </div>
   </div>
 
-  <!-- Tombol Aksi -->
+  <!-- Aksi -->
   <div class="action-buttons">
     <img src="images/harian-icon.png" onclick="Game.claimDaily()" alt="Harian">
     <img src="images/peti-hadiah.png" onclick="Game.watchAd()" alt="Peti Hadiah">
@@ -46,27 +46,6 @@
     <img src="images/share-bagi.png" onclick="Game.shareReward()" alt="Share">
   </div>
 
-  <!-- Hadiah jatuh -->
-  <div id="hadiah-container"></div>
-
-  <!-- Gelembung Iklan -->
-  <img id="bubble-ad" src="images/bubble.png" onclick="Game.claimAdBubble()" alt="Bubble Ad">
-
-  <!-- Sparkle -->
-  <div id="sparkle-container"></div>
-
-  <!-- Log Notifikasi -->
-  <div id="log">Notifikasi</div>
-
-  <!-- Script Game -->
   <script src="game.js"></script>
-
-  <!-- Pasang video src -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const vid = document.getElementById("baby-video");
-      vid.src = "videos/baby-dance.webm";
-    });
-  </script>
 </body>
 </html>
