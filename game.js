@@ -145,6 +145,15 @@ const Game = (() => {
     coins = 0;
     updateDisplay();
   }
+  function spawnCoin(x, y) {
+  const coin = document.createElement("div");
+  coin.className = "coin-fly";
+  coin.innerText = "💰";
+  coin.style.left = `${x}px`;
+  coin.style.top = `${y}px`;
+  document.body.appendChild(coin);
+  setTimeout(() => coin.remove(), 1000);
+}
 
   return { updateDisplay, earn, claimDaily, watchAd, spinWheel, claimAdBubble, shareReward, cairkan };
 })();
@@ -165,19 +174,28 @@ document.addEventListener("DOMContentLoaded", () => {
     laughSound.currentTime = 0;
     laughSound.play();
     createSparkle(e.clientX, e.clientY);
+    vid.addEventListener("click", (e) => {
+  Game.earn();
+  laughSound.currentTime = 0;
+  laughSound.play();
+  createSparkle(e.clientX, e.clientY);
+  spawnCoin(e.clientX, e.clientY); // ini efek koin
+    }
   });
   Game.updateDisplay();
 });
 
-// Bubble iklan muncul tiap menit
+// === Bubble iklan tiap menit ===
 setInterval(() => {
   const el = document.getElementById("bubble-ad");
-  if (!el) return;
-  if (el.style.display !== "block") {
+  if (el && el.style.display !== "block") {
     el.style.display = "block";
     el.classList.remove("anim");
-    void el.offsetWidth;
+    void el.offsetWidth; // trigger reflow
     el.classList.add("anim");
-    setTimeout(() => el.style.display = "none", 10000);
+
+    setTimeout(() => {
+      el.style.display = "none";
+    }, 10000); // tampil selama 10 detik
   }
-}, 60000);
+}, 60000); // tiap 60 detik
