@@ -128,5 +128,14 @@ const Game = {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  Game.init();
+  const vid = document.getElementById("baby-video");
+  vid.src = "videos/baby-dance.webm";
+
+  vid.addEventListener("click", (e) => {
+    Game.laughEffect();
+    Game.showSparkle();
+    Game.addCoins(10);
+  });
+
+  Game.init(); // Inisialisasi sistem lainnya
 });
