@@ -1,0 +1,308 @@
+/* Reset dan Font */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+body {
+  background: linear-gradient(to bottom, #f3faff, #d0f0ff);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Top Info Bar */
+.top-bar {
+  background: #2c3e50;
+  color: white;
+  padding: 10px 20px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 14px;
+}
+
+.top-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#cairkan-btn {
+  margin-top: 4px;
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+#cairkan-btn:hover {
+  background: #43a047;
+}
+
+/* Logo dan Awan */
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-top: 20px;
+}
+.logo .awan {
+  width: 150px;
+  position: absolute;
+  z-index: 0;
+  animation: drift 5s infinite linear;
+}
+.logo h1 {
+  font-size: 36px;
+  color: #1c87c9;
+  z-index: 1;
+  text-shadow: 2px 2px 0 white;
+}
+@keyframes drift {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(20px); }
+  100% { transform: translateX(0); }
+}
+
+/* Karakter Bayi (Video) */
+#character-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  width: 200px;
+  height: auto;
+  position: relative;
+  pointer-events: none;
+}
+
+#baby-video {
+  width: 200px;
+  height: auto;
+  pointer-events: auto;
+  border: none;
+  background: transparent;
+  outline: none;
+  z-index: 2;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Sparkle effect */
+.sparkle {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: radial-gradient(circle, #fff 0%, #ffecb3 40%, transparent 70%);
+  border-radius: 50%;
+  opacity: 1;
+  animation: sparkle-fade 1s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes sparkle-fade {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+#sparkle-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 999;
+}
+
+  #baby-video {
+  width: 200px;
+  height: auto;
+  pointer-events: auto; /* Penting: biar bisa diklik */
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  border: none;
+  background: transparent;
+  position: relative;
+  z-index: 10;
+}
+
+/* XP Bar */
+#status-bar {
+  position: absolute;
+  top: calc(50% + 110px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ffffffdd;
+  border-radius: 10px;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 6;
+}
+
+#xp-bar-container {
+  width: 150px;
+  height: 10px;
+  background: #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+}
+
+#xp-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(to right, #4caf50, #81c784);
+  transition: width 0.3s ease-in-out;
+}
+
+#xp-bar::after {
+  content: attr(data-percent) "%";
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: #333;
+  font-weight: bold;
+}
+
+.level {
+  font-size: 13px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+/* Tombol Aksi */
+.action-buttons {
+  position: fixed;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 10;
+}
+.action-buttons img {
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.action-buttons img:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+/* Hadiah Container */
+#hadiah-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.hadiah {
+  position: absolute;
+  width: 60px;
+  animation: jatuh 2s ease-in forwards;
+}
+@keyframes jatuh {
+  0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translateY(400px) rotate(360deg); opacity: 1; }
+}
+
+/* Bubble Iklan */
+#bubble-ad {
+  width: 60px;
+  height: 60px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  cursor: pointer;
+  z-index: 5;
+}
+#bubble-ad.anim {
+  animation: floatAround 10s linear forwards;
+}
+@keyframes floatAround {
+  0%   { transform: translate(-50%, -50%) rotate(0deg) translateX(0); }
+  25%  { transform: translate(-50%, -55%) rotate(15deg) translateX(20px); }
+  50%  { transform: translate(-50%, -60%) rotate(-15deg) translateX(-20px); }
+  75%  { transform: translate(-50%, -65%) rotate(10deg) translateX(15px); }
+  100% { transform: translate(-50%, -70%) rotate(0deg) translateX(0); }
+}
+
+/* Notifikasi */
+#log {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 8px 15px;
+  border-radius: 20px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 14px;
+  z-index: 100;
+}
+#log.show {
+  opacity: 1;
+}
+
+/* Efek Coin Terbang */
+.coin-fly {
+  position: absolute;
+  font-size: 24px;
+  animation: flyUp 1s forwards ease-out;
+  z-index: 5;
+}
+@keyframes flyUp {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-100px); }
+}
+
+/* Efek Level Up */
+.level-up-effect {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ffd700;
+  color: #222;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 10px 20px;
+  border-radius: 30px;
+  z-index: 99;
+  animation: popUp 1.2s ease-out;
+}
+@keyframes popUp {
+  0% { transform: translate(-50%, 0) scale(0.5); opacity: 0; }
+  50% { transform: translate(-50%, -20px) scale(1.1); opacity: 1; }
+  100% { transform: translate(-50%, -40px) scale(1); opacity: 0; }
+  }
