@@ -7,18 +7,60 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Bayi Video -->
+  <!-- Top Info -->
+  <div class="top-bar">
+    <div class="top-col">
+      <div>IDR: <span id="idr">0</span></div>
+      <button id="cairkan-btn" onclick="Game.cairkan()">Cairkan 💸</button>
+    </div>
+    <div class="top-col">XP: <span id="xp">0</span></div>
+    <div class="top-col">COIN: <span id="coins">0</span></div>
+  </div>
+
+  <!-- Logo -->
+  <div class="logo">
+    <img src="images/awan.png" alt="cloud" class="awan">
+    <h1>VapiCoin</h1>
+  </div>
+
+  <!-- Karakter Bayi -->
   <div id="character-wrapper">
     <video id="baby-video" autoplay loop muted playsinline></video>
   </div>
 
-  <!-- Sparkle container -->
+  <!-- XP Bar -->
+  <div id="status-bar">
+    <div class="level">Lv. <span id="level">1</span></div>
+    <div id="xp-bar-container">
+      <div id="xp-bar" data-percent="0"></div>
+    </div>
+  </div>
+
+  <!-- Tombol Aksi -->
+  <div class="action-buttons">
+    <img src="images/harian-icon.png" onclick="Game.claimDaily()" alt="Harian">
+    <img src="images/peti-hadiah.png" onclick="Game.watchAd()" alt="Peti Hadiah">
+    <img src="images/ad-iklan.png" onclick="Game.watchAd()" alt="Tonton Iklan">
+    <img src="images/spin-dadu.png" onclick="Game.spinWheel()" alt="Spin">
+    <img src="images/share-bagi.png" onclick="Game.shareReward()" alt="Share">
+  </div>
+
+  <!-- Hadiah jatuh -->
+  <div id="hadiah-container"></div>
+
+  <!-- Gelembung Iklan -->
+  <img id="bubble-ad" src="images/bubble.png" onclick="Game.claimAdBubble()" alt="Bubble Ad">
+
+  <!-- Sparkle -->
   <div id="sparkle-container"></div>
+
+  <!-- Log Notifikasi -->
+  <div id="log">Notifikasi</div>
 
   <!-- Script Game -->
   <script src="game.js"></script>
 
-  <!-- Pasang video src setelah elemen siap -->
+  <!-- Pasang video src -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const vid = document.getElementById("baby-video");
