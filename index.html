@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VapiCoin</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Bayi Video -->
+  <div id="character-wrapper">
+    <video id="baby-video" autoplay loop muted playsinline></video>
+  </div>
+
+  <!-- Sparkle container -->
+  <div id="sparkle-container"></div>
+
+  <!-- Script Game -->
+  <script src="game.js"></script>
+
+  <!-- Pasang video src setelah elemen siap -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const vid = document.getElementById("baby-video");
+      vid.src = "videos/baby-dance.webm";
+    });
+  </script>
+</body>
+</html>
