@@ -97,6 +97,8 @@ const Game = (() => {
     document.getElementById("hadiah-container").appendChild(img);
     // Tidak dihapus, hadiah tetap tampil
   }
+    setTimeout(() => img.remove(), 3000); // atau hapus jika ingin tetap di layar
+}
 
   function cairkan() {
     const rp = Math.floor(coins / 100);
