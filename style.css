@@ -83,7 +83,7 @@ body {
 
   #baby-video {  
   width: 100%;  
-  max-width: 300px;   /* Batas lebar agar tidak terlalu besar */
+  max-width: 200px;   /* Batas lebar agar tidak terlalu besar */
   height: auto;  
   cursor: pointer;  
   pointer-events: auto;  
@@ -145,7 +145,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  z-index: 10;
+  z-index: 20;
 }
 .action-buttons img {
   width: 50px;
