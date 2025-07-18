@@ -84,8 +84,8 @@ const Game = (() => {
     const coin = document.createElement("div");
     coin.className = "coin-fly";
     coin.innerText = "💰";
-    coin.style.left = `${x}px`;
-    coin.style.top = `${y}px`;
+    coin.style.left = x+ "px";
+    coin.style.top = y+ "px";
     document.body.appendChild(coin);
     setTimeout(() => coin.remove(), 1000);
   }
