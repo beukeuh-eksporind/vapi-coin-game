@@ -230,11 +230,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }, 60000);
 });
 function spawnCoin(x, y) {
-    const coin = document.createElement("div");
-    coin.className = "coin-fly";
-    coin.innerText = "💰";
-    coin.style.left = x+ "px";
-    coin.style.top = y+ "px";
-    document.body.appendChild(coin);
-    setTimeout(() => coin.remove(), 1000);
+  const coin = document.createElement("div");
+  coin.className = "coin-fly";
+  coin.innerText = "💰";
+  coin.style.left = x + "px";
+  coin.style.top = y + "px";
+  document.getElementById("sparkle-container").appendChild(coin);
+  setTimeout(() => coin.remove(), 1000);
 }
