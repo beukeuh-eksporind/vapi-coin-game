@@ -1,10 +1,10 @@
-// === Audio ===
+// === AUDIO ===
 const coinSound = new Audio("sounds/coin.wav");
 coinSound.volume = 0.5;
 const laughSound = new Audio("sounds/baby-laugh.wav");
 laughSound.volume = 0.7;
 
-// === Game Logic ===
+// === GAME MODULE ===
 const Game = (() => {
   let coins = +localStorage.getItem("coins") || 0;
   let xp = +localStorage.getItem("xp") || 0;
@@ -48,10 +48,8 @@ const Game = (() => {
     addXP(5);
     showLog("+10 koin!");
     updateDisplay();
-    try {
-      coinSound.currentTime = 0;
-      coinSound.play();
-    } catch {}
+    coinSound.currentTime = 0;
+    coinSound.play();
   }
 
   function showLog(msg) {
@@ -59,6 +57,25 @@ const Game = (() => {
     el.innerText = msg;
     el.classList.add("show");
     setTimeout(() => el.classList.remove("show"), 2000);
+  }
+
+  function spawnCoin(x, y) {
+    const coin = document.createElement("div");
+    coin.className = "coin-fly";
+    coin.innerText = "💰";
+    coin.style.left = x + "px";
+    coin.style.top = y + "px";
+    document.body.appendChild(coin);
+    setTimeout(() => coin.remove(), 1000);
+  }
+
+  function createSparkle(x, y) {
+    const s = document.createElement("div");
+    s.className = "sparkle";
+    s.style.left = x + "px";
+    s.style.top = y + "px";
+    document.getElementById("sparkle-container").appendChild(s);
+    setTimeout(() => s.remove(), 1000);
   }
 
   function showLevelUp() {
@@ -70,45 +87,28 @@ const Game = (() => {
   }
 
   function dropPrize() {
-  const hadiahList = ["boneka", "botol", "mobil", "balok"];
-  const nama = hadiahList[Math.floor(Math.random() * hadiahList.length)];
-  const src = `images/hadiah-${nama}.png`;
-
-  const img = document.createElement("img");
-  img.src = src;
-  img.className = "hadiah jatuh"; // pakai class animasi
-  img.dataset.nama = nama; // simpan nama untuk restore nanti
-
-  img.style.left = Math.random() * 60 + 20 + "%";
-
-  document.getElementById("hadiah-container").appendChild(img);
-
-  // Setelah animasi jatuh (2 detik), ubah jadi hadiah-static
-  setTimeout(() => {
-    img.className = "hadiah-static";
-    img.style.bottom = "80px"; // tetap di bawah XP bar
-    img.style.left = "auto"; // biar nanti bisa pakai flex/grid
-  }, 2000);
-
-  // Simpan ke localStorage
-  const hadiahSebelumnya = JSON.parse(localStorage.getItem("hadiahTerkumpul") || "[]");
-  hadiahSebelumnya.push(nama);
-  localStorage.setItem("hadiahTerkumpul", JSON.stringify(hadiahSebelumnya));
+    const hadiah = ["boneka", "botol", "mobil", "balok"];
+    const src = `images/hadiah-${hadiah[Math.floor(Math.random() * hadiah.length)]}.png`;
+    const img = document.createElement("img");
+    img.src = src;
+    img.className = "hadiah";
+    img.style.left = Math.random() * 60 + 20 + "%";
+    img.style.top = "calc(100% - 80px)";
+    document.getElementById("hadiah-container").appendChild(img);
+    // Tidak dihapus, hadiah tetap tampil
   }
 
-  // Jatuhkan dari atas
-  const img = document.createElement("img");
-  img.src = src;
-  img.className = "hadiah";
-  img.style.left = Math.random() * 60 + 20 + "%";
-  document.getElementById("hadiah-container").appendChild(img);
-  setTimeout(() => img.remove(), 3000);
+  function cairkan() {
+    const rp = Math.floor(coins / 100);
+    if (rp < 1000) {
+      showLog("❌ Belum mencapai Rp1.000");
+      return;
+    }
+    showLog("✅ Penarikan diproses");
+    coins = 0;
+    updateDisplay();
+  }
 
-  // Tampilkan di bawah XP bar
-  const hadiahBaru = document.createElement("img");
-  hadiahBaru.src = src;
-  document.getElementById("hadiah-terkumpul").appendChild(hadiahBaru);
-}
   function claimDaily() {
     if (localStorage.getItem("dailyClaim") === today) {
       showLog("❌ Sudah klaim hari ini.");
@@ -124,17 +124,22 @@ const Game = (() => {
   function watchAd() {
     const lastAdTime = localStorage.getItem("lastAdTime");
     const now = Date.now();
-    const cooldown = 86400000;
+    const cooldown = 3600 * 1000;
     if (lastAdTime && now - lastAdTime < cooldown) {
       const sisa = Math.ceil((cooldown - (now - lastAdTime)) / 1000);
       showLog(`⏳ Tunggu ${sisa} detik lagi.`);
       return;
     }
-    showLog("▶️ Menayangkan iklan...");
+
+    // Tampilkan overlay iklan
+    const overlay = document.getElementById("ad-overlay");
+    overlay.style.display = "flex";
+
     setTimeout(() => {
+      overlay.style.display = "none";
       coins += 50;
       localStorage.setItem("lastAdTime", now);
-      showLog("🏵 Dapat 50 koin dari iklan!");
+      showLog("🎥 Dapat 50 koin dari iklan!");
       updateDisplay();
     }, 3000);
   }
@@ -153,38 +158,22 @@ const Game = (() => {
   }
 
   function claimAdBubble() {
-  const today = new Date().toLocaleDateString();
-  if (localStorage.getItem("bubbleAdDate") === today) {
-    showLog("❌ Sudah klaim bubble hari ini.");
-  } else {
-    const overlay = document.getElementById("ad-overlay");
-    overlay.style.display = "flex";
-    setTimeout(() => {
-      overlay.style.display = "none";
+    if (localStorage.getItem("bubbleAdDate") === today) {
+      showLog("❌ Sudah klaim bubble hari ini.");
+    } else {
       coins += 50;
       addXP(5);
       localStorage.setItem("bubbleAdDate", today);
-      showLog("🎁 Dapat 50 koin dari iklan!");
+      showLog("🎁 Dapat 50 koin dari bubble!");
       document.getElementById("bubble-ad").style.display = "none";
       updateDisplay();
-    }, 3500); // Simulasi 'tonton' 3,5 detik
+    }
   }
-  }
+
   function shareReward() {
     coins += 30;
     addXP(5);
     showLog("📤 Dapat 30 koin dari share!");
-    updateDisplay();
-  }
-
-  function cairkan() {
-    const rp = Math.floor(coins / 100);
-    if (rp < 1000) {
-      showLog("❌ Belum mencapai Rp1.000");
-      return;
-    }
-    showLog("✅ Penarikan diproses");
-    coins = 0;
     updateDisplay();
   }
 
@@ -199,54 +188,33 @@ const Game = (() => {
     shareReward,
     addXP,
     spawnCoin,
+    createSparkle,
   };
 })();
 
-// === Sparkle ===
-function createSparkle(x, y) {
-  const s = document.createElement("div");
-  s.className = "sparkle";
-  s.style.left = x + "px";
-  s.style.top = y + "px";
-  document.getElementById("sparkle-container").appendChild(s);
-  setTimeout(() => s.remove(), 1000);
-}
-
-// === Inisialisasi ===
-  document.addEventListener("DOMContentLoaded", () => {
+// === INIT ===
+document.addEventListener("DOMContentLoaded", () => {
   const vid = document.getElementById("baby-video");
-  vid.src = "videos/baby-dance.webm";
 
   vid.addEventListener("click", (e) => {
     Game.earn();
     laughSound.currentTime = 0;
     laughSound.play();
-    createSparkle(e.clientX, e.clientY);
-
+    
     const rect = vid.getBoundingClientRect();
     const x = rect.left + rect.width / 2;
     const y = rect.top - 30;
-    spawnCoin(x, y);
-  });
 
-  // Tampilkan kembali hadiah yang tersimpan
-  const hadiahTersimpan = JSON.parse(localStorage.getItem("hadiahTerkumpul") || "[]");
-  hadiahTersimpan.forEach(nama => {
-    const img = document.createElement("img");
-    img.src = `images/hadiah-${nama}.png`;
-    img.className = "hadiah-static";
-    img.style.bottom = "80px";
-    img.style.left = "auto";
-    document.getElementById("hadiah-container").appendChild(img);
+    Game.createSparkle(x, y);
+    Game.spawnCoin(x, y);
   });
 
   Game.updateDisplay();
-});
 
-  // Bubble muncul tiap 60 detik
+  // Bubble coin muncul tiap 60 detik
   setInterval(() => {
     const el = document.getElementById("bubble-ad");
-    if (el && el.style.display !== "block") {
+    if (el.style.display !== "block") {
       el.style.display = "block";
       el.classList.remove("anim");
       void el.offsetWidth;
@@ -257,12 +225,3 @@ function createSparkle(x, y) {
     }
   }, 60000);
 });
-function spawnCoin(x, y) {
-  const coin = document.createElement("div");
-  coin.className = "coin-fly";
-  coin.innerText = "💰";
-  coin.style.left = x + "px";
-  coin.style.top = y + "px";
-  document.getElementById("sparkle-container").appendChild(coin);
-  setTimeout(() => coin.remove(), 1000);
-}
