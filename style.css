@@ -207,7 +207,7 @@ body {
   position: absolute;
   width: 50px;
   left: 50%;
-  top: 60%
+  top: 10%
   transform: translateX(-50%);
   animation: jatuh 2s ease-in forwards;
 }
@@ -223,7 +223,7 @@ body {
   height: 60px;
   position: fixed;
   left: 20px;
-  bottom: 50px;
+  bottom: 100px;
   display: none;
   cursor: pointer;
   z-index: 10;
