@@ -76,10 +76,12 @@ const Game = (() => {
     img.src = src;
     img.className = "hadiah";
     img.style.left = Math.random() * 60 + 20 + "%";
+    document.getElementById("hadiah-container").appendChild(img);
 
-    const container = document.getElementById("hadiah-container");
-    container.appendChild(img);
-    // Hadiah tidak dihapus agar terkumpul
+    // Simpan ke localStorage
+    const saved = JSON.parse(localStorage.getItem("hadiahList") || "[]");
+    saved.push(nama);
+    localStorage.setItem("hadiahList", JSON.stringify(saved));
   }
 
   function spawnCoin(x, y) {
@@ -101,6 +103,18 @@ const Game = (() => {
     setTimeout(() => s.remove(), 1000);
   }
 
+  function tampilkanHadiahTersimpan() {
+    const saved = JSON.parse(localStorage.getItem("hadiahList") || "[]");
+    const container = document.getElementById("hadiah-container");
+    saved.forEach(nama => {
+      const img = document.createElement("img");
+      img.src = `images/hadiah-${nama}.png`;
+      img.className = "hadiah";
+      img.style.left = Math.random() * 60 + 20 + "%";
+      container.appendChild(img);
+    });
+  }
+
   function claimDaily() {
     if (localStorage.getItem("dailyClaim") === today) {
       showLog("❌ Sudah klaim hari ini.");
@@ -114,11 +128,11 @@ const Game = (() => {
   }
 
   function watchAd() {
-    const lastAdTime = localStorage.getItem("lastAdTime");
+    const last = localStorage.getItem("lastAdTime");
     const now = Date.now();
-    const cooldown = 86400000; // 1 hari
-    if (lastAdTime && now - lastAdTime < cooldown) {
-      const sisa = Math.ceil((cooldown - (now - lastAdTime)) / 1000);
+    const cooldown = 86400000;
+    if (last && now - last < cooldown) {
+      const sisa = Math.ceil((cooldown - (now - last)) / 1000);
       showLog(`⏳ Tunggu ${sisa} detik lagi.`);
       return;
     }
@@ -175,6 +189,11 @@ const Game = (() => {
     updateDisplay();
   }
 
+  function resetSemua() {
+    localStorage.clear();
+    location.reload();
+  }
+
   return {
     updateDisplay,
     earn,
@@ -186,41 +205,8 @@ const Game = (() => {
     shareReward,
     addXP,
     spawnCoin,
-    createSparkle
+    createSparkle,
+    resetSemua,
+    tampilkanHadiahTersimpan
   };
 })();
-
-// === Inisialisasi ===
-document.addEventListener("DOMContentLoaded", () => {
-  const vid = document.getElementById("baby-video");
-  vid.src = "videos/baby-dance.webm";
-
-  vid.addEventListener("click", (e) => {
-    Game.earn();
-    laughSound.currentTime = 0;
-    laughSound.play();
-
-    const rect = vid.getBoundingClientRect();
-    const x = rect.left + rect.width / 2;
-    const y = rect.top + rect.height * 0.2; // muncul agak di atas kepala
-
-    Game.createSparkle(x, y);
-    Game.spawnCoin(x, y);
-  });
-
-  Game.updateDisplay();
-
-  // Bubble muncul otomatis
-  setInterval(() => {
-    const el = document.getElementById("bubble-ad");
-    if (el.style.display !== "block") {
-      el.style.display = "block";
-      el.classList.remove("anim");
-      void el.offsetWidth;
-      el.classList.add("anim");
-      setTimeout(() => {
-        el.style.display = "none";
-      }, 10000);
-    }
-  }, 60000);
-});
