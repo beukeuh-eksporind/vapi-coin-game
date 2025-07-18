@@ -218,29 +218,24 @@ body {
 }
 
 /* ========== BUBBLE IKLAN ========== */
-#bubble-ad {
-  width: 60px;
-  height: 60px;
-  position: absolute;
-  left: 20px;
-  bottom: 100px;
-  display: none;
-  cursor: pointer;
-  z-index: 10;
-  border-radius: 50%;
-  overflow: hidden;
-  -webkit-tap-highlight-color: transparent;
-}
-#bubble-ad.anim {
-  animation: floatAround 10s linear forwards;
-}
-@keyframes spin {
-  0%   { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+@keyframes floatAround {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(15px, -10px); }
+  50%  { transform: translate(-10px, 15px); }
+  75%  { transform: translate(10px, -5px); }
+  100% { transform: translate(0, 0); }
 }
 
-#bubble-ad img {
-  animation: spin 4s linear infinite;
+#bubble-ad {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+  animation: floatAround 8s ease-in-out infinite;
+  z-index: 10;
+  cursor: pointer;
 }
 
 /* ========== LOG NOTIFIKASI ========== */
