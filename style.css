@@ -1,124 +1,162 @@
-// === Audio ===
-const coinSound = new Audio("sounds/coin.wav");
-coinSound.volume = 0.5;
-
-const laughSound = new Audio("sounds/baby-laugh.wav");
-laughSound.volume = 0.7;
-
-// === Game Logic ===
-const Game = (() => {
-  let coins = +localStorage.getItem("coins") || 0;
-  let xp = +localStorage.getItem("xp") || 0;
-  let level = +localStorage.getItem("level") || 1;
-  const today = new Date().toLocaleDateString();
-
-  function updateDisplay() {
-    document.getElementById("coins").innerText = coins;
-    document.getElementById("xp").innerText = xp;
-    document.getElementById("level").innerText = level;
-    document.getElementById("idr").innerText = Math.floor(coins / 100).toLocaleString("id-ID");
-    updateXPBar();
-    localStorage.setItem("coins", coins);
-    localStorage.setItem("xp", xp);
-    localStorage.setItem("level", level);
-  }
-
-  function updateXPBar() {
-    const max = level * 100;
-    const pct = Math.min((xp / max) * 100, 100);
-    const bar = document.getElementById("xp-bar");
-    bar.style.width = `${pct}%`;
-    bar.setAttribute("data-percent", Math.round(pct));
-  }
-
-  function addXP(n) {
-    xp += n;
-    if (xp >= level * 100) {
-      xp -= level * 100;
-      level++;
-      coins += 100;
-      showLevelUp();
-      dropPrize();
-      showLog(`⭐ Naik ke Lv.${level}! +100 koin`);
-    }
-    updateDisplay();
-  }
-
-  function earn() {
-    coins += 10;
-    addXP(5);
-    updateDisplay();
-    showLog("+10 koin!");
-    try {
-      coinSound.currentTime = 0;
-      coinSound.play();
-    } catch {}
-  }
-
-  function cairkan() {
-    const rp = Math.floor(coins / 100);
-    if (rp < 1000) {
-      showLog("❌ Belum mencapai Rp1.000");
-      return;
-    }
-    showLog("✅ Penarikan sedang diproses...");
-    coins = 0;
-    updateDisplay();
-  }
-
-  return {
-    updateDisplay,
-    earn,
-    cairkan
-  };
-})();
-
-// === Efek Koin Terbang ===
-function spawnCoin(x, y) {
-  const el = document.createElement("div");
-  el.className = "coin-fly";
-  el.innerText = "💰";
-  el.style.left = x + "px";
-  el.style.top = y + "px";
-  document.body.appendChild(el);
-  setTimeout(() => el.remove(), 1000);
+/* Reset & Umum */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+body {
+  background: linear-gradient(to bottom, #f3faff, #d0f0ff);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
 }
 
-// === Efek Sparkle ===
-function createSparkle(x, y) {
-  const s = document.createElement("div");
-  s.className = "sparkle";
-  s.style.left = x + "px";
-  s.style.top = y + "px";
-  document.getElementById("sparkle-container").appendChild(s);
-  setTimeout(() => s.remove(), 1000);
+/* Top Bar */
+.top-bar {
+  background: #2c3e50;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 14px;
+  font-weight: bold;
+}
+.top-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#cairkan-btn {
+  margin-top: 5px;
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+#cairkan-btn:hover {
+  background: #43a047;
 }
 
-// === Efek Level Up ===
-function showLevelUp() {
-  const el = document.createElement("div");
-  el.className = "level-up-effect";
-  el.innerText = "⭐ LEVEL UP!";
-  document.body.appendChild(el);
-  setTimeout(() => el.remove(), 1200);
+/* Logo */
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  position: relative;
+}
+.logo .awan {
+  width: 150px;
+  position: absolute;
+  z-index: 0;
+  animation: drift 5s linear infinite;
+}
+.logo h1 {
+  font-size: 36px;
+  color: #1c87c9;
+  text-shadow: 2px 2px 0 white;
+  z-index: 1;
+}
+@keyframes drift {
+  0%,100% { transform: translateX(0); }
+  50% { transform: translateX(20px); }
 }
 
-// === Efek Hadiah Jatuh ===
-function dropPrize() {
-  const daftar = ["boneka", "botol", "mobil", "balok"];
-  const src = `images/hadiah-${daftar[Math.floor(Math.random() * daftar.length)]}.png`;
-  const img = document.createElement("img");
-  img.src = src;
-  img.className = "hadiah";
-  img.style.left = Math.floor(Math.random() * 60 + 20) + "%";
-  document.body.appendChild(img);
-  setTimeout(() => img.remove(), 3000);
+/* Karakter Bayi */
+#character-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+  position: relative;
+  z-index: 2;
 }
-/* --- Coin terbang --- */
+#baby-video {
+  width: 200px;
+  height: auto;
+  border: none;
+  background: transparent;
+  user-select: none;
+  pointer-events: auto;
+  z-index: 2;
+}
+
+/* XP Bar */
+#status-bar {
+  margin: 20px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  background: #ffffffdd;
+  padding: 6px 12px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  width: fit-content;
+}
+.level {
+  font-weight: bold;
+  color: #2c3e50;
+  font-size: 13px;
+}
+#xp-bar-container {
+  width: 150px;
+  height: 10px;
+  background: #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+}
+#xp-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(to right, #4caf50, #81c784);
+  transition: width 0.3s ease;
+}
+#xp-bar::after {
+  content: attr(data-percent) "%";
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  color: #333;
+}
+
+/* Tombol Aksi */
+.action-buttons {
+  position: fixed;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 3;
+}
+.action-buttons img {
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transition: 0.2s ease;
+}
+.action-buttons img:hover {
+  transform: scale(1.1);
+}
+
+/* Coin Fly */
 .coin-fly {
   position: absolute;
   font-size: 24px;
-  animation: flyUp 1s forwards ease-out;
+  animation: flyUp 1s ease-out forwards;
   z-index: 99;
 }
 @keyframes flyUp {
@@ -126,13 +164,41 @@ function dropPrize() {
   100% { opacity: 0; transform: translateY(-100px); }
 }
 
-/* --- Hadiah Jatuh --- */
+/* Sparkle */
+#sparkle-container {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 999;
+}
+.sparkle {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: radial-gradient(circle, #fff 0%, #ffecb3 40%, transparent 70%);
+  border-radius: 50%;
+  animation: sparkle-fade 1s ease-out forwards;
+}
+@keyframes sparkle-fade {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+/* Hadiah */
+#hadiah-container {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 3;
+}
 .hadiah {
   position: absolute;
   width: 50px;
   max-width: 60px;
   animation: jatuh 2s ease-in forwards;
-  z-index: 98;
+  z-index: 4;
 }
 @keyframes jatuh {
   0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
@@ -140,7 +206,7 @@ function dropPrize() {
   100% { transform: translateY(400px) rotate(360deg); opacity: 1; }
 }
 
-/* --- Bubble iklan --- */
+/* Bubble Iklan */
 #bubble-ad {
   width: 60px;
   height: 60px;
@@ -150,7 +216,7 @@ function dropPrize() {
   transform: translate(-50%, -50%);
   display: none;
   cursor: pointer;
-  z-index: 97;
+  z-index: 5;
 }
 #bubble-ad.anim {
   animation: floatAround 10s linear forwards;
@@ -162,59 +228,43 @@ function dropPrize() {
   75%  { transform: translate(-50%, -65%) rotate(10deg) translateX(15px); }
   100% { transform: translate(-50%, -70%) rotate(0deg) translateX(0); }
 }
-  #hadiah-container {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-  z-index: 3;
-}
 
-#sparkle-container {
+/* Log Notifikasi */
+#log {
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 999;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 8px 15px;
+  border-radius: 20px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 14px;
+  z-index: 100;
 }
-// === Log Pesan ===
-function showLog(msg) {
-  const el = document.getElementById("log");
-  el.innerText = msg;
-  el.classList.add("show");
-  setTimeout(() => el.classList.remove("show"), 2000);
+#log.show {
+  opacity: 1;
 }
 
-// === Bubble Iklan Tiap Menit ===
-setInterval(() => {
-  const el = document.getElementById("bubble-ad");
-  if (el && el.style.display !== "block") {
-    el.style.display = "block";
-    el.classList.remove("anim");
-    void el.offsetWidth;
-    el.classList.add("anim");
-    setTimeout(() => {
-      el.style.display = "none";
-    }, 10000);
-  }
-}, 60000);
-
-// === Setup Saat Halaman Siap ===
-document.addEventListener("DOMContentLoaded", () => {
-  const vid = document.getElementById("baby-video");
-  if (vid) {
-    vid.src = "videos/baby-dance.webm";
-    vid.addEventListener("click", (e) => {
-      Game.earn();
-      try {
-        laughSound.currentTime = 0;
-        laughSound.play();
-      } catch {}
-      spawnCoin(e.clientX, e.clientY);
-      createSparkle(e.clientX, e.clientY);
-    });
-  }
-
-  Game.updateDisplay();
-});
+/* Level Up */
+.level-up-effect {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ffd700;
+  color: #222;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 10px 20px;
+  border-radius: 30px;
+  z-index: 99;
+  animation: popUp 1.2s ease-out;
+}
+@keyframes popUp {
+  0% { transform: translate(-50%, 0) scale(0.5); opacity: 0; }
+  50% { transform: translate(-50%, -20px) scale(1.1); opacity: 1; }
+  100% { transform: translate(-50%, -40px) scale(1); opacity: 0; }
+}
