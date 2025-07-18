@@ -1,5 +1,5 @@
-<!-- === index.html === -->
-<!DOCTYPE html><html lang="id">
+<!DOCTYPE html>
+<html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Top Bar -->
+  <!-- Top Info -->
   <div class="top-bar">
     <div class="top-col">
       <div>IDR: <span id="idr">0</span></div>
@@ -15,28 +15,49 @@
     </div>
     <div class="top-col">XP: <span id="xp">0</span></div>
     <div class="top-col">COIN: <span id="coins">0</span></div>
-  </div>  <!-- Logo -->  <div class="logo">
+  </div>
+
+  <!-- Logo -->
+  <div class="logo">
     <img src="images/awan.png" alt="cloud" class="awan">
     <h1>VapiCoin</h1>
-  </div>  <!-- Bayi Video -->  <div id="character-wrapper">
+  </div>
+
+  <!-- Karakter Bayi -->
+  <div id="character-wrapper">
     <video id="baby-video" autoplay loop muted playsinline></video>
-  </div>  <!-- XP Bar -->  <div id="status-bar">
+  </div>
+
+  <!-- XP Bar -->
+  <div id="status-bar">
     <div class="level">Lv. <span id="level">1</span></div>
     <div id="xp-bar-container">
       <div id="xp-bar" data-percent="0"></div>
     </div>
-  </div>  <!-- Tombol Aksi -->  <div class="action-buttons">
+  </div>
+
+  <!-- Tombol Aksi -->
+  <div class="action-buttons">
     <img src="images/harian-icon.png" onclick="Game.claimDaily()" alt="Harian">
     <img src="images/peti-hadiah.png" onclick="Game.watchAd()" alt="Peti Hadiah">
-    <img src="images/ad-iklan.png" onclick="Game.watchAd()" alt="Tonton Iklan">
     <img src="images/spin-dadu.png" onclick="Game.spinWheel()" alt="Spin">
     <img src="images/share-bagi.png" onclick="Game.shareReward()" alt="Share">
-  </div>  <!-- Tambahan -->  <div id="hadiah-container"></div>
-  <img src="images/coin-bubble.png" id="bubble-ad" onclick="Game.claimAdBubble()" alt="Bubble">
+  </div>
+
+  <!-- Efek -->
   <div id="sparkle-container"></div>
-  <div id="log"></div>  <!-- Script -->  <script src="game.js"></script>  <script>
+  <div id="hadiah-container"></div>
+  <div id="bubble-ad" onclick="Game.claimAdBubble()">
+    <img src="images/bubble-coin.png" alt="Bubble" style="width:100%;height:100%" />
+  </div>
+  <div id="log"></div>
+
+  <!-- Script -->
+  <script src="game.js"></script>
+  <script>
     document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("baby-video").src = "videos/baby-dance.webm";
     });
-  </script></body>
+  </script>
+</body>
 </html>
