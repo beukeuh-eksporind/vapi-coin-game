@@ -89,7 +89,24 @@ const Game = (() => {
     document.body.appendChild(coin);
     setTimeout(() => coin.remove(), 1000);
   }
+ function dropPrize() {
+  const hadiah = ["boneka", "botol", "mobil", "balok"];
+  const nama = hadiah[Math.floor(Math.random() * hadiah.length)];
+  const src = `images/hadiah-${nama}.png`;
 
+  // Jatuhkan dari atas
+  const img = document.createElement("img");
+  img.src = src;
+  img.className = "hadiah";
+  img.style.left = Math.random() * 60 + 20 + "%";
+  document.getElementById("hadiah-container").appendChild(img);
+  setTimeout(() => img.remove(), 3000);
+
+  // Tampilkan di bawah XP bar
+  const hadiahBaru = document.createElement("img");
+  hadiahBaru.src = src;
+  document.getElementById("hadiah-terkumpul").appendChild(hadiahBaru);
+}
   function claimDaily() {
     if (localStorage.getItem("dailyClaim") === today) {
       showLog("❌ Sudah klaim hari ini.");
