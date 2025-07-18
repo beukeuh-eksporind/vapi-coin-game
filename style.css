@@ -73,17 +73,18 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 30px;
+  margin: 20px auto;
+  width: 100%;
+  max-width: 300px;
   position: relative;
   z-index: 2;
 }
 #baby-video {
   width: 200px;
   height: auto;
-  border: none;
-  background: transparent;
-  user-select: none;
   pointer-events: auto;
+  background: transparent;
+  outline: none;
   z-index: 2;
 }
 
@@ -128,7 +129,25 @@ body {
   font-size: 11px;
   color: #333;
 }
+#hadiah-terkumpul {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+  padding: 8px;
+  min-height: 60px;
+  z-index: 5;
+}
 
+#hadiah-terkumpul img {
+  width: 40px;
+  height: auto;
+  transition: transform 0.3s;
+}
+#hadiah-terkumpul img:hover {
+  transform: scale(1.2);
+}
 /* Tombol Aksi */
 .action-buttons {
   position: fixed;
