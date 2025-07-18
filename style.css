@@ -216,7 +216,7 @@ body {
   transform: translate(-50%, -50%);
   display: none;
   cursor: pointer;
-  z-index: 100;
+  z-index: 5;
 }
 #bubble-ad.anim {
   animation: floatAround 10s linear forwards;
