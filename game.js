@@ -153,18 +153,23 @@ const Game = (() => {
   }
 
   function claimAdBubble() {
-    if (localStorage.getItem("bubbleAdDate") === today) {
-      showLog("❌ Sudah klaim bubble hari ini.");
-    } else {
+  const today = new Date().toLocaleDateString();
+  if (localStorage.getItem("bubbleAdDate") === today) {
+    showLog("❌ Sudah klaim bubble hari ini.");
+  } else {
+    const overlay = document.getElementById("ad-overlay");
+    overlay.style.display = "flex";
+    setTimeout(() => {
+      overlay.style.display = "none";
       coins += 50;
       addXP(5);
       localStorage.setItem("bubbleAdDate", today);
-      showLog("🎁 Dapat 50 koin dari bubble!");
+      showLog("🎁 Dapat 50 koin dari iklan!");
       document.getElementById("bubble-ad").style.display = "none";
       updateDisplay();
-    }
+    }, 3500); // Simulasi 'tonton' 3,5 detik
   }
-
+  }
   function shareReward() {
     coins += 30;
     addXP(5);
