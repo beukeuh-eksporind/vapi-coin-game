@@ -151,6 +151,23 @@ const Game = (() => {
     coins = 0;
     updateDisplay();
   }
+  
+  function spawnCoin(x, y) {
+  const coin = document.createElement("div");
+  coin.className = "coin-fly";
+  coin.innerText = "💰";
+  coin.style.left = x + "px";
+  coin.style.top = y + "px";
+  document.body.appendChild(coin);
+  setTimeout(() => coin.remove(), 1000);
+}
+  vid.addEventListener("click", (e) => {
+  Game.earn();
+  laughSound.currentTime = 0;
+  laughSound.play();
+  createSparkle(e.clientX, e.clientY);
+  spawnCoin(e.clientX, e.clientY); // Tambahkan baris ini!
+});
 
   return {
     updateDisplay,
