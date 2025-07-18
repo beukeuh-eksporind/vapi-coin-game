@@ -210,3 +210,36 @@ const Game = (() => {
     tampilkanHadiahTersimpan
   };
 })();
+document.addEventListener("DOMContentLoaded", () => {
+  const vid = document.getElementById("baby-video");
+  vid.src = "videos/baby-dance.webm";
+
+  vid.addEventListener("click", (e) => {
+    Game.earn();
+    laughSound.currentTime = 0;
+    laughSound.play();
+
+    const rect = vid.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height * 0.2;
+
+    Game.createSparkle(x, y);
+    Game.spawnCoin(x, y);
+  });
+
+  Game.updateDisplay();
+  Game.tampilkanHadiahTersimpan();
+
+  setInterval(() => {
+    const el = document.getElementById("bubble-ad");
+    if (el.style.display !== "block") {
+      el.style.display = "block";
+      el.classList.remove("anim");
+      void el.offsetWidth;
+      el.classList.add("anim");
+      setTimeout(() => {
+        el.style.display = "none";
+      }, 10000);
+    }
+  }, 60000);
+});
