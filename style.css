@@ -1,10 +1,11 @@
-/* Reset & Umum */
-  {
+/* ========== RESET ========== */
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'Arial', sans-serif;
 }
+
 body {
   background: linear-gradient(to bottom, #f3faff, #d0f0ff);
   min-height: 100vh;
@@ -12,24 +13,25 @@ body {
   position: relative;
 }
 
-/* Top Bar */
+/* ========== TOP INFO ========== */
 .top-bar {
   background: #2c3e50;
   color: white;
   padding: 10px 20px;
   display: flex;
   justify-content: space-around;
-  align-items: center;
   font-size: 14px;
   font-weight: bold;
 }
+
 .top-col {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
 #cairkan-btn {
-  margin-top: 5px;
+  margin-top: 4px;
   background: #4caf50;
   color: white;
   border: none;
@@ -43,69 +45,67 @@ body {
   background: #43a047;
 }
 
-/* Logo */
+/* ========== LOGO ========== */
 .logo {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
   position: relative;
+  margin-top: 20px;
 }
 .logo .awan {
-  width: 200px;
+  width: 150px;
   position: absolute;
   z-index: 0;
-  animation: drift 5s linear infinite;
+  animation: drift 5s infinite linear;
 }
 .logo h1 {
   font-size: 36px;
   color: #1c87c9;
-  text-shadow: 2px 2px 0 white;
   z-index: 1;
+  text-shadow: 2px 2px 0 white;
 }
 @keyframes drift {
-  0%,100% { transform: translateX(0); }
+  0% { transform: translateX(0); }
   50% { transform: translateX(20px); }
+  100% { transform: translateX(0); }
 }
 
-/* Karakter Bayi */
+/* ========== VIDEO BAYI ========== */
 #character-wrapper {
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin: 20px auto;
-  width: 100%;
-  max-width: 300px;
-  position: relative;
-  z-index: 2;
+  margin-top: 20px;
 }
 #baby-video {
   width: 200px;
-  height: auto;
   pointer-events: auto;
   background: transparent;
   outline: none;
+  user-select: none;
   z-index: 2;
+  border-radius: 10px;
 }
 
-/* XP Bar */
+/* ========== XP STATUS BAR ========== */
 #status-bar {
   margin: 20px auto;
+  background: #ffffffdd;
+  border-radius: 10px;
+  padding: 6px 12px;
   display: flex;
-  justify-content: center;
   align-items: center;
   gap: 10px;
-  background: #ffffffdd;
-  padding: 6px 12px;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  width: fit-content;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: max-content;
 }
+
 .level {
+  font-size: 14px;
   font-weight: bold;
   color: #2c3e50;
-  font-size: 13px;
 }
+
 #xp-bar-container {
   width: 150px;
   height: 10px;
@@ -114,11 +114,12 @@ body {
   overflow: hidden;
   position: relative;
 }
+
 #xp-bar {
   height: 100%;
   width: 0%;
   background: linear-gradient(to right, #4caf50, #81c784);
-  transition: width 0.3s ease;
+  transition: width 0.3s ease-in-out;
 }
 #xp-bar::after {
   content: attr(data-percent) "%";
@@ -126,29 +127,12 @@ body {
   top: -20px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 11px;
+  font-size: 12px;
   color: #333;
-}
-#hadiah-terkumpul {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 10px;
-  flex-wrap: wrap;
-  padding: 8px;
-  min-height: 60px;
-  z-index: 5;
+  font-weight: bold;
 }
 
-#hadiah-terkumpul img {
-  width: 40px;
-  height: auto;
-  transition: transform 0.3s;
-}
-#hadiah-terkumpul img:hover {
-  transform: scale(1.2);
-}
-/* Tombol Aksi */
+/* ========== TOMBOL AKSI ========== */
 .action-buttons {
   position: fixed;
   top: 50%;
@@ -157,7 +141,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  z-index: 3;
+  z-index: 10;
 }
 .action-buttons img {
   width: 50px;
@@ -165,30 +149,22 @@ body {
   cursor: pointer;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  transition: 0.2s ease;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 .action-buttons img:hover {
   transform: scale(1.1);
-}
-/* Coin Fly */
-.coin-fly {
-  position: absolute;
-  font-size: 24px;
-  z-index: 9999;
-  animation: flyUp 1s forwards ease-out;
-}
-@keyframes flyUp {
-  0% { transform: translateY(0); opacity: 1; }
-  100% { transform: translateY(-100px); opacity: 0; }
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
-/* Sparkle */
+/* ========== SPARKLE EFFECT ========== */
 #sparkle-container {
   position: fixed;
   top: 0; left: 0;
-  width: 100%; height: 100%;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
-  z-index: 9999;
+  overflow: hidden;
+  z-index: 999;
 }
 .sparkle {
   position: absolute;
@@ -196,104 +172,82 @@ body {
   height: 16px;
   background: radial-gradient(circle, #fff 0%, #ffecb3 40%, transparent 70%);
   border-radius: 50%;
+  opacity: 1;
   animation: sparkle-fade 1s ease-out forwards;
+  pointer-events: none;
 }
 @keyframes sparkle-fade {
   0% { transform: scale(1); opacity: 1; }
   100% { transform: scale(2); opacity: 0; }
 }
 
-/* Hadiah */
+/* ========== COIN FLY EFFECT ========== */
+.coin-fly {
+  position: absolute;
+  font-size: 24px;
+  z-index: 9999;
+  animation: flyUp 1s ease-out forwards;
+}
+@keyframes flyUp {
+  0%   { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-100px); opacity: 0; }
+}
+
+/* ========== HADIAH JATUH ========== */
 #hadiah-container {
   position: fixed;
-  top: 0; /* atau bisa diubah sesuai kebutuhan */
+  top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 10;
+  z-index: 5;
 }
 .hadiah {
   position: absolute;
   width: 50px;
+  left: 50%;
+  transform: translateX(-50%);
   animation: jatuh 2s ease-in forwards;
 }
 @keyframes jatuh {
-  0%   { transform: translateY(-50px) rotate(0deg); opacity: 0; }
+  0%   { transform: translateY(-100px) rotate(0deg); opacity: 0; }
   30%  { opacity: 1; }
   100% { transform: translateY(300px) rotate(360deg); opacity: 1; }
 }
 
-.hadiah-static {
-  position: relative;
-  width: 40px;
-  margin: 0 4px;
-}
-
-/* Setelah jatuh, hadiah diam di bawah XP bar */
-.hadiah-static {
-  position: absolute;
-  bottom: 80px; /* Sesuaikan dengan posisi XP bar */
-  left: auto;
-  width: 40px;
-  animation: none;
-  transform: none;
-}
-/* Ad Overlay */
-#ad-overlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.8);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 99999;
-}
-
-#ad-box {
-  background: white;
-  padding: 20px 30px;
-  border-radius: 20px;
-  font-size: 18px;
-  color: #333;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-}
-@keyframes fadeInScale {
-  0% { transform: scale(0.5); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
-}
-/* Bubble Iklan */
+/* ========== BUBBLE IKLAN ========== */
 #bubble-ad {
   width: 60px;
   height: 60px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  position: fixed;
+  left: 20px;
+  bottom: 100px;
   display: none;
   cursor: pointer;
-  z-index: 5;
+  z-index: 10;
+  border-radius: 50%;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
 }
 #bubble-ad.anim {
   animation: floatAround 10s linear forwards;
 }
 @keyframes floatAround {
-  0%   { transform: translate(-50%, -50%) rotate(0deg) translateX(0); }
-  25%  { transform: translate(-50%, -55%) rotate(15deg) translateX(20px); }
-  50%  { transform: translate(-50%, -60%) rotate(-15deg) translateX(-20px); }
-  75%  { transform: translate(-50%, -65%) rotate(10deg) translateX(15px); }
-  100% { transform: translate(-50%, -70%) rotate(0deg) translateX(0); }
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-20px); }
+  100% { transform: translateY(0); }
 }
-#bubble-ad {
-  -webkit-tap-highlight-color: transparent;
-  outline: none;
-  user-select: none;
+#bubble-ad img {
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
-/* Log Notifikasi */
+
+/* ========== LOG NOTIFIKASI ========== */
 #log {
   position: fixed;
-  bottom: 10px;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   background: #333;
@@ -301,7 +255,7 @@ body {
   padding: 8px 15px;
   border-radius: 20px;
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.3s ease;
   font-size: 14px;
   z-index: 100;
 }
@@ -309,12 +263,12 @@ body {
   opacity: 1;
 }
 
-/* Level Up */
+/* ========== LEVEL UP EFFECT ========== */
 .level-up-effect {
   position: fixed;
-  top: 40%;
+  top: 30%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   background: #ffd700;
   color: #222;
   font-weight: bold;
@@ -325,7 +279,7 @@ body {
   animation: popUp 1.2s ease-out;
 }
 @keyframes popUp {
-  0% { transform: translate(-50%, 0) scale(0.5); opacity: 0; }
-  50% { transform: translate(-50%, -20px) scale(1.1); opacity: 1; }
+  0%   { transform: translate(-50%, 0) scale(0.5); opacity: 0; }
+  50%  { transform: translate(-50%, -20px) scale(1.1); opacity: 1; }
   100% { transform: translate(-50%, -40px) scale(1); opacity: 0; }
 }
