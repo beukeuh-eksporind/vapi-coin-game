@@ -72,21 +72,23 @@ body {
 }
 
 /* ========== VIDEO BAYI ========== */
-#character-wrapper {
+  #character-wrapper {
   position: relative;
-  z-index: 5;
-}
-
-#baby-video {
-  width: 100%;
-  height: auto;
+  z-index: 10;
+  text-align: center;
+  margin: 20px 0;
+  }
+  #baby-video {
+  width: 300px;            /* Atur ukuran baby di sini */
   max-width: 90%;
+  height: auto;
   cursor: pointer;
   pointer-events: auto;
-  z-index: 10;
+  z-index: 15;
   position: relative;
+  display: block;
+  margin: 0 auto;
 }
-  
 /* ========== XP STATUS BAR ========== */
 #status-bar {
   margin: 20px auto;
