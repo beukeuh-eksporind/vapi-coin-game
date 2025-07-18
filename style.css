@@ -155,13 +155,13 @@ body {
 /* Coin Fly */
 .coin-fly {
   position: absolute;
-  font-size: 24px;
+  font-size: 28px;
   animation: flyUp 1s ease-out forwards;
-  z-index: 99;
+  z-index: 9999;
 }
 @keyframes flyUp {
-  0% { opacity: 1; transform: translateY(0); }
-  100% { opacity: 0; transform: translateY(-100px); }
+  0% { opacity: 1; transform: translateY(0); opacity:1;}
+  100% { opacity: 0; transform: translateY(-100px): opacity:0; }
 }
 
 /* Sparkle */
