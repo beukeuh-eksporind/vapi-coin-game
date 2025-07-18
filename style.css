@@ -80,6 +80,7 @@ body {
 #baby-video {
   width: 100%;
   height: auto;
+  max-width: 90%;
   cursor: pointer;
   pointer-events: auto;
   z-index: 10;
