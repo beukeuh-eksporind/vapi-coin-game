@@ -221,15 +221,25 @@ body {
 }
 .hadiah {
   position: absolute;
-  width: 100px;
-  max-width: 100px;
+  width: 50px;
   animation: jatuh 2s ease-in forwards;
-  z-index: 4;
+  z-index: 3;
 }
+
 @keyframes jatuh {
-  0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
+  0% { transform: translateY(-100px) rotate(0); opacity: 0; }
   30% { opacity: 1; }
   100% { transform: translateY(400px) rotate(360deg); opacity: 1; }
+}
+
+/* Setelah jatuh, hadiah diam di bawah XP bar */
+.hadiah-static {
+  position: absolute;
+  bottom: 80px; /* Sesuaikan dengan posisi XP bar */
+  left: auto;
+  width: 40px;
+  animation: none;
+  transform: none;
 }
 
 /* Bubble Iklan */
@@ -254,7 +264,11 @@ body {
   75%  { transform: translate(-50%, -65%) rotate(10deg) translateX(15px); }
   100% { transform: translate(-50%, -70%) rotate(0deg) translateX(0); }
 }
-
+#bubble-ad {
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  user-select: none;
+}
 /* Log Notifikasi */
 #log {
   position: fixed;
