@@ -52,7 +52,7 @@ body {
   position: relative;
 }
 .logo .awan {
-  width: 150px;
+  width: 200px;
   position: absolute;
   z-index: 0;
   animation: drift 5s linear infinite;
@@ -195,8 +195,8 @@ body {
 }
 .hadiah {
   position: absolute;
-  width: 50px;
-  max-width: 60px;
+  width: 90px;
+  max-width: 100px;
   animation: jatuh 2s ease-in forwards;
   z-index: 4;
 }
@@ -216,7 +216,7 @@ body {
   transform: translate(-50%, -50%);
   display: none;
   cursor: pointer;
-  z-index: 5;
+  z-index: 100;
 }
 #bubble-ad.anim {
   animation: floatAround 10s linear forwards;
