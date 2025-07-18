@@ -85,7 +85,7 @@ const Game = (() => {
     coin.className = "coin-fly";
     coin.innerText = "💰";
     coin.style.left = `${x}px`;
-    coin.style.top = `${y-80}+px`;
+    coin.style.top = `${y}px`;
     document.body.appendChild(coin);
     setTimeout(() => coin.remove(), 1000);
   }
@@ -191,17 +191,22 @@ function createSparkle(x, y) {
 // === Inisialisasi ===
 document.addEventListener("DOMContentLoaded", () => {
   const vid = document.getElementById("baby-video");
+
   vid.addEventListener("click", (e) => {
     Game.earn();
     laughSound.currentTime = 0;
     laughSound.play();
     createSparkle(e.clientX, e.clientY);
-    Game.spawnCoin(e.clientX, e.clientY);
+
+    const rect = vid.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top - 30;
+
+    spawnCoin(x, y);
   });
 
   Game.updateDisplay();
 
-  // Tampilkan bubble tiap 60 detik
   setInterval(() => {
     const el = document.getElementById("bubble-ad");
     if (el && el.style.display !== "block") {
