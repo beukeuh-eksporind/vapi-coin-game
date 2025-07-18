@@ -70,20 +70,31 @@ const Game = (() => {
   }
 
   function dropPrize() {
-    const hadiah = ["boneka", "botol", "mobil", "balok"];
-    const src = `images/hadiah-${hadiah[Math.floor(Math.random() * hadiah.length)]}.png`;
-    const img = document.createElement("img");
-    img.src = src;
-    img.className = "hadiah";
-    img.style.left = Math.random() * 60 + 20 + "%";
-    document.getElementById("hadiah-container").appendChild(img);
-    setTimeout(() => img.remove(), 3000);
-  }
-  
- function dropPrize() {
-  const hadiah = ["boneka", "botol", "mobil", "balok"];
-  const nama = hadiah[Math.floor(Math.random() * hadiah.length)];
+  const hadiahList = ["boneka", "botol", "mobil", "balok"];
+  const nama = hadiahList[Math.floor(Math.random() * hadiahList.length)];
   const src = `images/hadiah-${nama}.png`;
+
+  const img = document.createElement("img");
+  img.src = src;
+  img.className = "hadiah jatuh"; // pakai class animasi
+  img.dataset.nama = nama; // simpan nama untuk restore nanti
+
+  img.style.left = Math.random() * 60 + 20 + "%";
+
+  document.getElementById("hadiah-container").appendChild(img);
+
+  // Setelah animasi jatuh (2 detik), ubah jadi hadiah-static
+  setTimeout(() => {
+    img.className = "hadiah-static";
+    img.style.bottom = "80px"; // tetap di bawah XP bar
+    img.style.left = "auto"; // biar nanti bisa pakai flex/grid
+  }, 2000);
+
+  // Simpan ke localStorage
+  const hadiahSebelumnya = JSON.parse(localStorage.getItem("hadiahTerkumpul") || "[]");
+  hadiahSebelumnya.push(nama);
+  localStorage.setItem("hadiahTerkumpul", JSON.stringify(hadiahSebelumnya));
+  }
 
   // Jatuhkan dari atas
   const img = document.createElement("img");
@@ -197,8 +208,9 @@ function createSparkle(x, y) {
 }
 
 // === Inisialisasi ===
-document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", () => {
   const vid = document.getElementById("baby-video");
+  vid.src = "videos/baby-dance.webm";
 
   vid.addEventListener("click", (e) => {
     Game.earn();
@@ -206,14 +218,25 @@ document.addEventListener("DOMContentLoaded", () => {
     laughSound.play();
     createSparkle(e.clientX, e.clientY);
 
-    // 💰 muncul di atas kepala bayi
     const rect = vid.getBoundingClientRect();
     const x = rect.left + rect.width / 2;
     const y = rect.top - 30;
     spawnCoin(x, y);
   });
 
+  // Tampilkan kembali hadiah yang tersimpan
+  const hadiahTersimpan = JSON.parse(localStorage.getItem("hadiahTerkumpul") || "[]");
+  hadiahTersimpan.forEach(nama => {
+    const img = document.createElement("img");
+    img.src = `images/hadiah-${nama}.png`;
+    img.className = "hadiah-static";
+    img.style.bottom = "80px";
+    img.style.left = "auto";
+    document.getElementById("hadiah-container").appendChild(img);
+  });
+
   Game.updateDisplay();
+});
 
   // Bubble muncul tiap 60 detik
   setInterval(() => {
