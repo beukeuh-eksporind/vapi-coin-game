@@ -221,7 +221,7 @@ body {
 #bubble-ad {
   width: 60px;
   height: 60px;
-  position: fixed;
+  position: absolute;
   left: 20px;
   bottom: 100px;
   display: none;
@@ -234,15 +234,13 @@ body {
 #bubble-ad.anim {
   animation: floatAround 10s linear forwards;
 }
-@keyframes floatAround {
-  0%   { transform: translateY(0); }
-  50%  { transform: translateY(-20px); }
-  100% { transform: translateY(0); }
+@keyframes spin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
+
 #bubble-ad img {
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
+  animation: spin 4s linear infinite;
 }
 
 /* ========== LOG NOTIFIKASI ========== */
