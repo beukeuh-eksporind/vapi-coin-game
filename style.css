@@ -156,12 +156,12 @@ body {
 .coin-fly {
   position: absolute;
   font-size: 28px;
-  animation: flyUp 1s ease-out forwards;
+  animation: flyUp 1s forwards ease-out;
   z-index: 9999;
 }
 @keyframes flyUp {
-  0% { opacity: 1; transform: translateY(0); opacity:1;}
-  100% { opacity: 0; transform: translateY(-100px): opacity:0; }
+  0% { transform: translateY(0); opacity:1;}
+  100% { transform: translateY(-100px): opacity:0; }
 }
 
 /* Sparkle */
