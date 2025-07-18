@@ -48,8 +48,10 @@ const Game = (() => {
     addXP(5);
     showLog("+10 koin!");
     updateDisplay();
-    coinSound.currentTime = 0;
-    coinSound.play();
+    try {
+      coinSound.currentTime = 0;
+      coinSound.play();
+    } catch {}
   }
 
   function showLog(msg) {
@@ -76,6 +78,16 @@ const Game = (() => {
     img.style.left = Math.random() * 60 + 20 + "%";
     document.getElementById("hadiah-container").appendChild(img);
     setTimeout(() => img.remove(), 3000);
+  }
+
+  function spawnCoin(x, y) {
+    const coin = document.createElement("div");
+    coin.className = "coin-fly";
+    coin.innerText = "💰";
+    coin.style.left = `${x}px`;
+    coin.style.top = `${y}px`;
+    document.body.appendChild(coin);
+    setTimeout(() => coin.remove(), 1000);
   }
 
   function claimDaily() {
@@ -151,23 +163,6 @@ const Game = (() => {
     coins = 0;
     updateDisplay();
   }
-  
-  function spawnCoin(x, y) {
-  const coin = document.createElement("div");
-  coin.className = "coin-fly";
-  coin.innerText = "💰";
-  coin.style.left = x + "px";
-  coin.style.top = y + "px";
-  document.body.appendChild(coin);
-  setTimeout(() => coin.remove(), 1000);
-}
-  vid.addEventListener("click", (e) => {
-  Game.earn();
-  laughSound.currentTime = 0;
-  laughSound.play();
-  createSparkle(e.clientX, e.clientY);
-  spawnCoin(e.clientX, e.clientY); // Tambahkan baris ini!
-});
 
   return {
     updateDisplay,
@@ -178,7 +173,8 @@ const Game = (() => {
     spinWheel,
     claimAdBubble,
     shareReward,
-    addXP
+    addXP,
+    spawnCoin,
   };
 })();
 
@@ -195,12 +191,12 @@ function createSparkle(x, y) {
 // === Inisialisasi ===
 document.addEventListener("DOMContentLoaded", () => {
   const vid = document.getElementById("baby-video");
-
   vid.addEventListener("click", (e) => {
     Game.earn();
     laughSound.currentTime = 0;
     laughSound.play();
     createSparkle(e.clientX, e.clientY);
+    Game.spawnCoin(e.clientX, e.clientY);
   });
 
   Game.updateDisplay();
@@ -208,7 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Tampilkan bubble tiap 60 detik
   setInterval(() => {
     const el = document.getElementById("bubble-ad");
-    if (el.style.display !== "block") {
+    if (el && el.style.display !== "block") {
       el.style.display = "block";
       el.classList.remove("anim");
       void el.offsetWidth;
