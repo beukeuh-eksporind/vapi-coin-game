@@ -72,22 +72,24 @@ body {
 }
 
 /* ========== VIDEO BAYI ========== */
-  #character-wrapper {
-  position: relative;
-  z-index: 10;
-  text-align: center;
-  margin: 20px 0;
-  }
-  #baby-video {
-  width: 300px;            /* Atur ukuran baby di sini */
-  max-width: 90%;
-  height: auto;
-  cursor: pointer;
-  pointer-events: auto;
-  z-index: 15;
-  position: relative;
-  display: block;
-  margin: 0 auto;
+  #character-wrapper {  
+  position: relative;  
+  z-index: 5;  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+}
+
+  #baby-video {  
+  width: 100%;  
+  max-width: 300px;   /* Batas lebar agar tidak terlalu besar */
+  height: auto;  
+  cursor: pointer;  
+  pointer-events: auto;  
+  z-index: 10;  
+  position: relative;  
+  border-radius: 10px; /* opsional, biar lebih halus */
 }
 /* ========== XP STATUS BAR ========== */
 #status-bar {
