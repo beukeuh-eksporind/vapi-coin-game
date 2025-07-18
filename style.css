@@ -249,7 +249,31 @@ body {
   animation: none;
   transform: none;
 }
+#ad-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
 
+#ad-box {
+  background: white;
+  padding: 20px 30px;
+  border-radius: 20px;
+  font-size: 18px;
+  color: #333;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  animation: fadeInScale 0.3s ease-out;
+}
+
+@keyframes fadeInScale {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
 /* Bubble Iklan */
 #bubble-ad {
   width: 60px;
