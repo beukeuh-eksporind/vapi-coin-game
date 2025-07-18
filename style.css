@@ -157,7 +157,7 @@ body {
   position: absolute;
   font-size: 28px;
   animation: flyUp 1s forwards ease-out;
-  z-index: 9999;
+  z-index: 99;
 }
 @keyframes flyUp {
   0% { transform: translateY(0); opacity:1;}
@@ -195,7 +195,7 @@ body {
 }
 .hadiah {
   position: absolute;
-  width: 90px;
+  width: 100px;
   max-width: 100px;
   animation: jatuh 2s ease-in forwards;
   z-index: 4;
