@@ -198,15 +198,16 @@ document.addEventListener("DOMContentLoaded", () => {
     laughSound.play();
     createSparkle(e.clientX, e.clientY);
 
+    // 💰 muncul di atas kepala bayi
     const rect = vid.getBoundingClientRect();
     const x = rect.left + rect.width / 2;
     const y = rect.top - 30;
-
     spawnCoin(x, y);
   });
 
   Game.updateDisplay();
 
+  // Bubble muncul tiap 60 detik
   setInterval(() => {
     const el = document.getElementById("bubble-ad");
     if (el && el.style.display !== "block") {
