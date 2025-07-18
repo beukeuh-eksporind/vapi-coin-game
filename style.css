@@ -207,16 +207,17 @@ body {
   position: absolute;
   width: 50px;
   left: 50%;
-  top: 10%
+  top: 0;
   transform: translateX(-50%);
-  animation: jatuh 2s ease-in forwards;
-}
-@keyframes jatuh {
-  0%   { transform: translateY(-100px) rotate(0deg); opacity: 0; }
-  30%  { opacity: 1; }
-  100% { transform: translateY(300px) rotate(360deg); opacity: 1; }
+  animation: jatuh 2s ease-out forwards;
+  z-index: 9;
 }
 
+@keyframes jatuh {
+  0%   { transform: translate(-50%, -100px) rotate(0deg); opacity: 0; }
+  30%  { opacity: 1; }
+  100% { transform: translate(-50%, 180px) rotate(360deg); opacity: 1; }
+}
 /* ========== BUBBLE IKLAN ========== */
 @keyframes floatAround {
   0%   { transform: translate(0, 0); }
