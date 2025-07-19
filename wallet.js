@@ -1,61 +1,54 @@
-// === wallet.js: Sistem Dompet & Riwayat VapiCoin ===
+// === wallet.js ===
+const Wallet = {
+  saldo: 0,
 
-const Wallet = (() => {
-  const KEY = "vapiWallet";
-
-  function getData() {
-    return JSON.parse(localStorage.getItem(KEY)) || {
-      coins: 0,
-      lastWithdraw: null,
-      history: []
-    };
-  }
-
-  function saveData(data) {
-    localStorage.setItem(KEY, JSON.stringify(data));
-  }
-
-  function getCoins() {
-    return getData().coins;
-  }
-
-  function addCoins(amount, source = "reward") {
-    const data = getData();
-    data.coins += amount;
-    data.history.push({ type: "add", source, amount, time: Date.now() });
-    saveData(data);
-  }
-
-  function deductCoins(amount, reason = "withdraw") {
-    const data = getData();
-    if (data.coins >= amount) {
-      data.coins -= amount;
-      data.lastWithdraw = Date.now();
-      data.history.push({ type: "deduct", reason, amount, time: Date.now() });
-      saveData(data);
-      return true;
+  tarikUang: function(jumlah) {
+    jumlah = parseInt(jumlah);
+    if (isNaN(jumlah)) {
+      alert("Jumlah tidak valid.");
+      return;
     }
-    return false;
-  }
 
-  function getHistory(limit = 10) {
-    const data = getData();
-    return data.history.slice(-limit).reverse();
-  }
+    if (jumlah < 1000) {
+      alert("Minimal tarik Rp.1000.");
+      return;
+    }
 
-  function canWithdraw(limitPerDay = 1) {
-    const data = getData();
-    if (!data.lastWithdraw) return true;
-    const now = Date.now();
-    const oneDay = 24 * 60 * 60 * 1000;
-    return now - data.lastWithdraw >= oneDay * limitPerDay;
-  }
+    if (jumlah > koin) {
+      alert("Koin tidak cukup.");
+      return;
+    }
 
-  return {
-    getCoins,
-    addCoins,
-    deductCoins,
-    getHistory,
-    canWithdraw
-  };
-})();
+    // Lanjut proses penarikan
+    this.saldo += jumlah;
+    koin -= jumlah;
+
+    this.updateIDR();
+    updateKoin();
+    Exchange.tambahRiwayat(jumlah);
+    simpanData();
+
+    alert("Berhasil ditarik Rp." + jumlah);
+  },
+
+  updateIDR: function() {
+    const idrDisplay = document.getElementById("idr");
+    if (idrDisplay) {
+      idrDisplay.textContent = this.saldo;
+    }
+  },
+
+  simpan: function() {
+    localStorage.setItem("vapiSaldo", this.saldo);
+  },
+
+  muat: function() {
+    this.saldo = parseInt(localStorage.getItem("vapiSaldo")) || 0;
+    this.updateIDR();
+  }
+};
+
+// Panggil otomatis saat halaman load
+document.addEventListener("DOMContentLoaded", () => {
+  Wallet.muat();
+});
