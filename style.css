@@ -79,18 +79,7 @@ body {
   align-items: flex-start;
   padding: 100px 0 40px 0;
   height: 260px;
-}
-.coin-fly {
-  position: absolute;
-  font-size: 24px;
-  z-index: 9999;
-  transform: translate(-50%, 0); /* tengah horizontal */
-  animation: flyUp 1s ease-out forwards;
-}
-
-@keyframes flyUp {
-  0%   { transform: translate(-50%, 0) scale(1); opacity: 1; }
-  100% { transform: translate(-50%, -80px) scale(1.2); opacity: 0; }
+  z-index: 5;
 }
 
 #baby-video {
@@ -99,9 +88,22 @@ body {
   height: auto;
   cursor: pointer;
   pointer-events: auto;
-  z-index: 5;
+  z-index: 10;
   border-radius: 10px;
   position: relative;
+}
+
+.coin-fly {
+  position: absolute;
+  font-size: 24px;
+  z-index: 9999;
+  transform: translate(-50%, 0);
+  animation: flyUp 1s ease-out forwards;
+}
+
+@keyframes flyUp {
+  0%   { transform: translate(-50%, 0) scale(1); opacity: 1; }
+  100% { transform: translate(-50%, -80px) scale(1.2); opacity: 0; }
 }
 
 /* ========== XP BAR DI ATAS BAYI ========== */
@@ -117,9 +119,9 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10;
+  gap: 10px;
   width: auto;
-  z-index: 10;
+  z-index: 15;
   min-width: 130px;
 }
 
@@ -208,7 +210,7 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 5;
+  z-index: 12;
 }
 .hadiah {
   position: absolute;
@@ -222,7 +224,7 @@ body {
 @keyframes jatuh {
   0%   { transform: translate(-50%, -100px) rotate(0deg); opacity: 0; }
   30%  { opacity: 1; }
-  100% { transform: translate(-50%, 180px) rotate(360deg); opacity: 1; }
+  100% { transform: translate(-50%, 160px) rotate(360deg); opacity: 1; }
 }
 
 /* ========== BUBBLE IKLAN ========== */
@@ -231,19 +233,19 @@ body {
   width: 60px;
   height: 60px;
   left: 50%;
-  top: 40%;
+  top: 35%;
   transform: translate(-50%, -50%);
   animation: floatAround 8s ease-in-out infinite;
-  z-index: 10;
+  z-index: 13;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
 @keyframes floatAround {
-  0%   { transform: translate(0, 0); }
-  25%  { transform: translate(15px, -10px); }
-  50%  { transform: translate(-10px, 15px); }
-  75%  { transform: translate(10px, -5px); }
-  100% { transform: translate(0, 0); }
+  0%   { transform: translate(-50%, -50%) translate(0, 0); }
+  25%  { transform: translate(-50%, -50%) translate(15px, -10px); }
+  50%  { transform: translate(-50%, -50%) translate(-10px, 15px); }
+  75%  { transform: translate(-50%, -50%) translate(10px, -5px); }
+  100% { transform: translate(-50%, -50%) translate(0, 0); }
 }
 
 /* ========== LOG NOTIFIKASI ========== */
