@@ -83,7 +83,6 @@ body {
 #baby-coin {
   position: absolute;
   top: 20px;         /* atur ini agar pas di atas kepala */
-  left: 50%;
   align-items: center;
   transform: translateX(-50%);
   font-size: 32px;
