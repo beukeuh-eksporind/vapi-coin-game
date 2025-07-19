@@ -80,20 +80,19 @@ body {
   padding: 100px 0 40px 0;
   height: 260px;
 }
-#baby-coin {
+.coin-fly {
   position: absolute;
-  top: 10px;         /* atur ini agar pas di atas kepala */
-  align-items: center;
-  transform: translateX(-50%);
-  font-size: 32px;
-  z-index: 20;
-  animation: popCoin 1s ease-in-out infinite alternate;
+  font-size: 24px;
+  z-index: 9999;
+  transform: translate(-50%, 0); /* tengah horizontal */
+  animation: flyUp 1s ease-out forwards;
 }
 
-@keyframes popCoin {
-  0%   { transform: translateX(-50%) translateY(0); }
-  100% { transform: translateX(-50%) translateY(-5px); }
+@keyframes flyUp {
+  0%   { transform: translate(-50%, 0) scale(1); opacity: 1; }
+  100% { transform: translate(-50%, -80px) scale(1.2); opacity: 0; }
 }
+
 #baby-video {
   width: 100%;
   max-width: 200px;
