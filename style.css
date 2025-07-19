@@ -1,182 +1,92 @@
-/* === style.css: Tampilan VapiCoin Game === */
 
 body {
+  font-family: Arial, sans-serif;
   margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(to bottom, #d6f0ff, #ffffff);
-  color: #333;
-  overflow-x: hidden;
+  background: linear-gradient(to bottom, #cbe3ff, #ffffff);
 }
 
 .top-bar {
   display: flex;
   justify-content: space-between;
-  padding: 12px;
-  background: #0077cc;
+  padding: 10px;
+  background: #4da6ff;
   color: white;
   font-weight: bold;
-  flex-wrap: wrap;
 }
 
 .top-col {
-  margin: 4px 8px;
-}
-
-#login-form {
-  position: fixed;
-  top: 20%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #ffffffdd;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  z-index: 10000;
-}
-
-#login-form input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  width: 180px;
-}
-
-#login-form button {
-  padding: 8px 16px;
-  background: #2980b9;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
+  margin: 0 5px;
 }
 
 .logo {
   text-align: center;
-  margin: 20px 0;
+  margin-top: 20px;
 }
 
-.logo h1 {
-  font-size: 2.2em;
-  color: #0077cc;
-  margin: 0;
-}
-
-.logo img.awan {
-  width: 60px;
-  vertical-align: middle;
-  margin-right: 10px;
+.logo .awan {
+  width: 80px;
 }
 
 #character-wrapper {
   text-align: center;
-  margin-bottom: 20px;
+  margin: 20px 0;
 }
 
 #baby-video {
-  width: 240px;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  cursor: pointer;
-}
-
-#status-bar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin: 12px 0;
-}
-
-.level {
-  font-weight: bold;
-  color: #333;
-}
-
-#xp-bar-container {
-  width: 150px;
-  background: #eee;
-  border-radius: 6px;
-  overflow: hidden;
-  height: 10px;
-}
-
-#xp-bar {
-  background: #00b894;
-  height: 100%;
-  width: 0%;
-  transition: width 0.4s ease;
+  width: 200px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
 .actions {
   display: flex;
   justify-content: center;
-  gap: 12px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 .actions button {
-  padding: 10px 16px;
-  background: #27ae60;
-  color: white;
+  padding: 10px 15px;
+  font-size: 16px;
+  background: #ffcc00;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 1em;
+  font-weight: bold;
 }
 
-.actions button:hover {
-  background: #219150;
-}
-
-#riwayat {
-  margin: 0 auto;
-  padding: 16px;
-  max-width: 400px;
-  background: #f9f9f9;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  font-size: 0.9em;
-}
-
-#riwayat h3 {
-  margin-top: 0;
-  text-align: center;
-  color: #333;
-}
-
-#riwayat ul {
-  list-style: none;
-  padding: 0;
-}
-
-#riwayat li {
-  margin-bottom: 8px;
-  padding: 6px 10px;
-  background: #ffffff;
-  border-radius: 6px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-}
-
-.emoji-pop {
-  position: fixed;
-  font-size: 24px;
-  animation: floatUp 1s ease-out forwards;
-  pointer-events: none;
+.flying-emoji {
+  position: absolute;
+  top: 220px;
+  font-size: 28px;
+  animation: flyUp 2s ease-out forwards;
   z-index: 1000;
+  pointer-events: none;
 }
 
-@keyframes floatUp {
-  0% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-80px) scale(1.4);
-  }
+@keyframes flyUp {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-100px); }
+}
+
+.floating-msg {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ffd700;
+  color: #000;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  z-index: 9999;
+  animation: fadeUp 3s ease-out forwards;
+}
+
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translate(-50%, 10px); }
+  10% { opacity: 1; transform: translate(-50%, 0); }
+  90% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -20px); }
 }
