@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- ========== TOP INFO BAR ========== -->
   <div class="top-bar">
     <div class="top-col">👤 <span id="user-name">...</span></div>
     <div class="top-col">
@@ -19,21 +18,17 @@
     <div class="top-col">COIN: <span id="coins">0</span></div>
   </div>
 
-  <!-- ========== LOGIN TAMU ========== -->
   <div id="login-form">
     <input type="text" id="input-name" placeholder="Masukkan Nama Anda">
     <button id="submit-name">Mulai</button>
   </div>
 
-  <!-- ========== LOGO ========== -->
   <div class="logo">
     <img src="images/awan.png" alt="cloud" class="awan">
     <h1>VapiCoin</h1>
   </div>
 
-  <!-- ========== CHARACTER WRAPPER ========== -->
   <div id="character-wrapper">
-    <!-- XP BAR -->
     <div id="status-bar">
       <div class="level">Lv.<span id="level">1</span></div>
       <div id="xp-bar-container">
@@ -41,27 +36,20 @@
       </div>
     </div>
 
-    <!-- VIDEO BAYI -->
     <video id="baby-video" autoplay loop muted>
       <source src="videos/baby-dance.webm" type="video/webm">
       Video tidak didukung.
     </video>
   </div>
 
-  <!-- ========== ACTION BUTTONS ========== -->
   <div class="actions">
-    <button onclick="Game.kumpulkanKoin()">Kumpulkan Koin 🪙</button>
     <button onclick="Game.putarDadu()">Putar Dadu 🎲</button>
     <button onclick="Game.bagiKoin()">Bagikan 🔄</button>
   </div>
 
-  <!-- ========== RIWAYAT PENARIKAN ========== -->
   <div id="riwayat"></div>
-
-  <!-- ========== ANIMASI KOIN ========== -->
   <div id="coin-animation-wrapper"></div>
 
-  <!-- ========== SCRIPT ========== -->
   <script src="config.js"></script>
   <script src="wallet.js"></script>
   <script src="exchange.js"></script>
@@ -71,8 +59,7 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       Exchange.tampilkanRiwayat();
-
-      // Tambahkan event listener untuk video bayi di sini
+      klaimBonusHarian();
       const babyVideo = document.getElementById("baby-video");
       babyVideo.addEventListener("click", () => {
         tambahKoin(10);
