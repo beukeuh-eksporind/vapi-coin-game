@@ -19,7 +19,7 @@
     <div class="top-col">COIN: <span id="coins">0</span></div>
   </div>
 
-  <!-- LOGIN TAMU -->
+  <!-- ========== LOGIN TAMU ========== -->
   <div id="login-form">
     <input type="text" id="input-name" placeholder="Masukkan Nama Anda">
     <button id="submit-name">Mulai</button>
@@ -42,7 +42,7 @@
     </div>
 
     <!-- VIDEO BAYI -->
-    <video id="baby-video" autoplay loop muted onclick="Game.interaksiVideo(event)">
+    <video id="baby-video" autoplay loop muted>
       <source src="videos/baby-dance.webm" type="video/webm">
       Video tidak didukung.
     </video>
@@ -61,6 +61,7 @@
   <!-- ========== ANIMASI KOIN ========== -->
   <div id="coin-animation-wrapper"></div>
 
+  <!-- ========== SCRIPT ========== -->
   <script src="config.js"></script>
   <script src="wallet.js"></script>
   <script src="exchange.js"></script>
@@ -68,9 +69,17 @@
   <script src="auth.js"></script>
 
   <script>
-    // Tampilkan riwayat saat halaman dibuka
     document.addEventListener("DOMContentLoaded", () => {
       Exchange.tampilkanRiwayat();
+
+      // Tambahkan event listener untuk video bayi di sini
+      const babyVideo = document.getElementById("baby-video");
+      babyVideo.addEventListener("click", () => {
+        tambahKoin(10);
+        tambahXP(5);
+        playCoinSound();
+        showFlyingEmoji("🪙");
+      });
     });
   </script>
 </body>
