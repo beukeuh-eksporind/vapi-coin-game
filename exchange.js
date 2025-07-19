@@ -1,58 +1,79 @@
 const Exchange = {
+  pendingPenarikan: 0,
+
   tampilkanFormTukar: function () {
-    const nama = localStorage.getItem("userName") || "Tamu";
-    const coins = parseInt(localStorage.getItem("coins") || "0");
-    const idr = coins * 1;
+    const coinSaatIni = parseInt(localStorage.getItem("coins") || "0");
+    const terakhirTarik = localStorage.getItem("terakhirTarik");
+    const hariIni = new Date().toDateString();
 
-    if (idr < 1000) {
-      alert("Minimal penarikan adalah Rp 1000 (1000 koin)");
+    if (coinSaatIni < Config.minimalPenarikan) {
+      alert(Config.getInfoPenarikan());
       return;
     }
 
-    const riwayat = JSON.parse(localStorage.getItem("riwayat") || "[]");
-
-    // Cek apakah sudah tarik hari ini
-    const last = riwayat.length > 0 ? new Date(riwayat[riwayat.length - 1].waktu) : null;
-    const now = new Date();
-
-    if (last && (now - new Date(last)) < 86400000) {
-      alert("Kamu sudah tarik uang hari ini. Coba lagi besok.");
+    if (terakhirTarik === hariIni) {
+      alert("⚠️ Kamu sudah melakukan penarikan hari ini. Coba lagi besok!");
       return;
     }
 
-    const request = {
-      nama: nama,
-      jumlah: idr,
-      waktu: now.toISOString(),
-      status: "Menunggu verifikasi sistem"
-    };
+    // Simpan dulu jumlah penarikan yang akan diproses
+    this.pendingPenarikan = coinSaatIni;
 
-    riwayat.push(request);
-    localStorage.setItem("riwayat", JSON.stringify(riwayat));
+    // Tampilkan modal iklan dulu
+    const modal = document.getElementById("ads-modal");
+    if (modal) modal.style.display = "flex";
+  },
 
-    alert("Permintaan penarikan dikirim!\nDana akan diproses dalam 1x24 jam.");
+  iklanSelesai: function () {
+    const modal = document.getElementById("ads-modal");
+    if (modal) modal.style.display = "none";
+
+    const nominal = this.pendingPenarikan * Config.rateTukar;
+    const nama = localStorage.getItem("namaPengguna") || "Pengguna";
+
+    alert(`💸 ${nama}, kamu menarik Rp${nominal.toLocaleString('id-ID')}! Dana sedang diproses otomatis.`);
+
+    const riwayat = JSON.parse(localStorage.getItem("riwayatPenarikan") || "[]");
+    riwayat.push({
+      tanggal: new Date().toLocaleString('id-ID'),
+      jumlah: nominal
+    });
+    localStorage.setItem("riwayatPenarikan", JSON.stringify(riwayat));
+
+    localStorage.setItem("terakhirTarik", new Date().toDateString());
     localStorage.setItem("coins", "0");
-    document.getElementById("coins").textContent = "0";
-    document.getElementById("idr").textContent = "0";
-
+    localStorage.setItem("xp", "0");
+    Wallet.inisialisasi();
     this.tampilkanRiwayat();
   },
 
   tampilkanRiwayat: function () {
-    const container = document.getElementById("riwayat");
-    const riwayat = JSON.parse(localStorage.getItem("riwayat") || "[]");
+    const riwayat = JSON.parse(localStorage.getItem("riwayatPenarikan") || "[]");
+    const div = document.getElementById("riwayat");
+    if (!div) return;
 
-    if (riwayat.length === 0) {
-      container.innerHTML = "<h3>Belum ada riwayat penarikan</h3>";
+    let html = "<h3>Riwayat Penarikan</h3><ul>";
+    riwayat.reverse().forEach(item => {
+      html += `<li>${item.tanggal} — Rp${item.jumlah.toLocaleString('id-ID')}</li>`;
+    });
+    html += "</ul>";
+    div.innerHTML = html;
+  },
+
+  resetSemua: function (kodeAdmin) {
+    if (kodeAdmin !== "vareset2025") {
+      alert("❌ Kode admin salah!");
       return;
     }
 
-    let html = "<h3>Riwayat Penarikan</h3><ul>";
-    for (const item of riwayat) {
-      const tgl = new Date(item.waktu).toLocaleString("id-ID");
-      html += `<li>${tgl} - Rp${item.jumlah} (${item.status})</li>`;
-    }
-    html += "</ul>";
-    container.innerHTML = html;
+    localStorage.removeItem("riwayatPenarikan");
+    localStorage.removeItem("terakhirTarik");
+    localStorage.setItem("coins", "0");
+    localStorage.setItem("xp", "0");
+    localStorage.setItem("level", "1");
+
+    alert("✅ Semua data pengguna berhasil direset.");
+    Wallet.inisialisasi();
+    this.tampilkanRiwayat();
   }
 };
