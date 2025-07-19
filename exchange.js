@@ -1,64 +1,58 @@
-// === exchange.js ===
 const Exchange = {
   tampilkanFormTukar: function () {
-    const jumlah = prompt("Masukkan jumlah koin yang ingin ditarik:");
-    const nominal = parseInt(jumlah);
-    if (!isNaN(nominal)) {
-      Wallet.tarikUang(nominal);
-    } else {
-      alert("Input tidak valid.");
+    const nama = localStorage.getItem("userName") || "Tamu";
+    const coins = parseInt(localStorage.getItem("coins") || "0");
+    const idr = coins * 1;
+
+    if (idr < 1000) {
+      alert("Minimal penarikan adalah Rp 1000 (1000 koin)");
+      return;
     }
-  },
 
-  tambahRiwayat: function (jumlah) {
-    const data = JSON.parse(localStorage.getItem("riwayatTukar") || "[]");
+    const riwayat = JSON.parse(localStorage.getItem("riwayat") || "[]");
 
-    const penarikan = {
-      tgl: new Date().toLocaleString("id-ID"),
-      jumlah: jumlah
+    // Cek apakah sudah tarik hari ini
+    const last = riwayat.length > 0 ? new Date(riwayat[riwayat.length - 1].waktu) : null;
+    const now = new Date();
+
+    if (last && (now - new Date(last)) < 86400000) {
+      alert("Kamu sudah tarik uang hari ini. Coba lagi besok.");
+      return;
+    }
+
+    const request = {
+      nama: nama,
+      jumlah: idr,
+      waktu: now.toISOString(),
+      status: "Menunggu verifikasi sistem"
     };
 
-    data.push(penarikan);
-    localStorage.setItem("riwayatTukar", JSON.stringify(data));
+    riwayat.push(request);
+    localStorage.setItem("riwayat", JSON.stringify(riwayat));
+
+    alert("Permintaan penarikan dikirim!\nDana akan diproses dalam 1x24 jam.");
+    localStorage.setItem("coins", "0");
+    document.getElementById("coins").textContent = "0";
+    document.getElementById("idr").textContent = "0";
+
     this.tampilkanRiwayat();
-    Wallet.simpan();
   },
 
   tampilkanRiwayat: function () {
-    const riwayat = JSON.parse(localStorage.getItem("riwayatTukar") || "[]");
-    const riwayatDiv = document.getElementById("riwayat");
-    if (!riwayatDiv) return;
+    const container = document.getElementById("riwayat");
+    const riwayat = JSON.parse(localStorage.getItem("riwayat") || "[]");
 
     if (riwayat.length === 0) {
-      riwayatDiv.innerHTML = "<h3>Riwayat Penarikan</h3><p>Belum ada penarikan.</p>";
-    } else {
-      const listHTML = riwayat
-        .reverse()
-        .map(item => `<li><strong>${item.tgl}</strong>: Rp.${item.jumlah}</li>`)
-        .join("");
-
-      riwayatDiv.innerHTML = `
-        <h3>Riwayat Penarikan</h3>
-        <ul>${listHTML}</ul>
-      `;
+      container.innerHTML = "<h3>Belum ada riwayat penarikan</h3>";
+      return;
     }
 
-    // Tampilkan tombol reset kalau user adalah admin
-    const user = localStorage.getItem("vapiUser") || "";
-    if (user.toLowerCase() === "admin") {
-      const resetBtn = document.createElement("button");
-      resetBtn.textContent = "🔒 Reset Riwayat (Admin)";
-      resetBtn.style.marginTop = "10px";
-      resetBtn.onclick = this.resetRiwayat;
-      riwayatDiv.appendChild(resetBtn);
+    let html = "<h3>Riwayat Penarikan</h3><ul>";
+    for (const item of riwayat) {
+      const tgl = new Date(item.waktu).toLocaleString("id-ID");
+      html += `<li>${tgl} - Rp${item.jumlah} (${item.status})</li>`;
     }
-  },
-
-  resetRiwayat: function () {
-    if (confirm("Yakin ingin menghapus semua riwayat penarikan di device ini?")) {
-      localStorage.removeItem("riwayatTukar");
-      Exchange.tampilkanRiwayat();
-      alert("Riwayat berhasil di-reset.");
-    }
+    html += "</ul>";
+    container.innerHTML = html;
   }
 };
