@@ -1,4 +1,4 @@
-// === VapiCoin Game Logic ===
+// === VapiCoin Game Logic Final ===
 const coinSound = new Audio("sounds/coin.wav");
 coinSound.volume = 0.5;
 const laughSound = new Audio("sounds/baby-laugh.wav");
@@ -36,14 +36,12 @@ const Game = (() => {
       laughSound.play();
     }
   }
-function interaksiVideo() {
-  laughSound.play();
-  alert("Hihi! Bayinya senang kamu sentuh! 👶✨");
-}
+
   function kumpulkanKoin() {
     coins += 10;
     xp += 15;
     coinSound.play();
+    tampilkanAnimasiKoin();
     levelUpCheck();
     updateDisplay();
   }
@@ -76,13 +74,29 @@ function interaksiVideo() {
     }
   }
 
-  // Inisialisasi saat pertama kali
+  function interaksiVideo() {
+    laughSound.play();
+    alert("Hihi! Bayinya senang kamu sentuh! 👶✨");
+  }
+
+  function tampilkanAnimasiKoin() {
+    const wrapper = document.getElementById("coin-animation-wrapper");
+    const coin = document.createElement("div");
+    coin.className = "coin-pop";
+    wrapper.appendChild(coin);
+
+    setTimeout(() => {
+      wrapper.removeChild(coin);
+    }, 800);
+  }
+
   window.onload = updateDisplay;
 
   return {
     kumpulkanKoin,
     putarDadu,
     bagiKoin,
-    cairkan
+    cairkan,
+    interaksiVideo
   };
 })();
