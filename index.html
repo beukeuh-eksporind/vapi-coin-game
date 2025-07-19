@@ -59,6 +59,18 @@
       const vid = document.getElementById("baby-video");  
       vid.src = "videos/baby-dance.webm";  
     });  
+    <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const vid = document.getElementById("baby-video");
+    vid.src = "videos/baby-dance.webm";
+
+    // Update XP bar (contoh)
+    const xp = 40;
+    const maxXP = 100;
+    const percent = (xp / maxXP) * 100;
+    document.getElementById("xp-bar").style.width = percent + "%";
+  });
+</script>
   </script>    
   <!-- Script Game -->   
   <script src="game.js"></script>  
