@@ -80,7 +80,20 @@ body {
   padding: 100px 0 40px 0;
   height: 260px;
 }
+#baby-coin {
+  position: absolute;
+  top: 20px;         /* atur ini agar pas di atas kepala */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 32px;
+  z-index: 11;
+  animation: popCoin 1s ease-in-out infinite alternate;
+}
 
+@keyframes popCoin {
+  0%   { transform: translateX(-50%) translateY(0); }
+  100% { transform: translateX(-50%) translateY(-5px); }
+}
 #baby-video {
   width: 100%;
   max-width: 200px;
