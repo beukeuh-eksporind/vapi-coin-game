@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -24,27 +25,24 @@
   </div>
 
   <div class="logo">
-  <h1>VapiCoin</h1>
-  <div id="xp-bar-container">
-    <div id="xp-bar" data-percent="0"></div>
-  </div>
-  </div>
-
-  <div id="character-wrapper">
-    <div id="status-bar">
-      <div class="level">Lv.<span id="level">1</span></div>
+    <h1>VapiCoin</h1>
+    <div class="xp-header">
+      <span class="level-label">Lv.<span id="level">1</span></span>
       <div id="xp-bar-container">
         <div id="xp-bar" data-percent="0"></div>
       </div>
     </div>
+  </div>
 
-    <video id="baby-video" autoplay loop muted>
+  <div id="character-wrapper">
+    <video id="baby-video" autoplay loop muted onclick="Game.interaksiVideo(event)">
       <source src="videos/baby-dance.webm" type="video/webm">
       Video tidak didukung.
     </video>
   </div>
 
   <div class="actions">
+    <button onclick="Game.kumpulkanKoin()">Kumpulkan Koin 🪙</button>
     <button onclick="Game.putarDadu()">Putar Dadu 🎲</button>
     <button onclick="Game.bagiKoin()">Bagikan 🔄</button>
   </div>
@@ -61,14 +59,6 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       Exchange.tampilkanRiwayat();
-      klaimBonusHarian();
-      const babyVideo = document.getElementById("baby-video");
-      babyVideo.addEventListener("click", () => {
-        tambahKoin(10);
-        tambahXP(5);
-        playCoinSound();
-        showFlyingEmoji("🪙");
-      });
     });
   </script>
 </body>
