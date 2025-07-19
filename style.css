@@ -1,4 +1,4 @@
-/* ========== RESET ========== */
+/* ========== RESET & BODY ========== */
 * {
   margin: 0;
   padding: 0;
@@ -13,7 +13,7 @@ body {
   position: relative;
 }
 
-/* ========== TOP INFO ========== */
+/* ========== TOP BAR ========== */
 .top-bar {
   background: #2c3e50;
   color: white;
@@ -71,30 +71,31 @@ body {
   100% { transform: translateX(0); }
 }
 
-/* ========== VIDEO BAYI ========== */
-  #character-wrapper {  
-  position: relative;  
+/* ========== KARAKTER BAYI ========== */
+#character-wrapper {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px 0;
-  height: 240px;
+  padding: 40px 0;
+  height: 260px;
 }
 
-  #baby-video {  
-  width: 100%;  
-  max-width: 200px;   /* Batas lebar agar tidak terlalu besar */
-  height: auto;  
-  cursor: pointer;  
-  pointer-events: auto;  
-  z-index: 10;  
-  position: relative;  
-  border-radius: 10px; /* opsional, biar lebih halus */
+#baby-video {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 5;
+  border-radius: 10px;
+  position: relative;
 }
-/* XP BAR DI ATAS BAYI */
+
+/* ========== XP BAR DI ATAS BAYI ========== */
 #status-bar {
   position: absolute;
-  top: 0; /* Posisikan di atas karakter */
+  top: 0;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(255, 255, 255, 0.9);
@@ -104,19 +105,17 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 20;
+  z-index: 10;
   min-width: 130px;
 }
 
-/* teks Lv. 10 */
 .level {
   font-size: 13px;
   font-weight: bold;
   color: #333;
-  margin-bottom: 3px;
+  margin-bottom: 4px;
 }
 
-/* Container XP bar */
 #xp-bar-container {
   width: 120px;
   height: 8px;
@@ -125,22 +124,12 @@ body {
   overflow: hidden;
 }
 
-/* Bar progress */
 #xp-bar {
   height: 100%;
-  width: 0%; /* Ubah via JS */
+  width: 0%;
   background: linear-gradient(to right, #4caf50, #81c784);
   border-radius: 4px;
-  transition: width
-#xp-bar::after {
-  content: attr(data-percent) "%";
-  position: absolute;
-  top: -20px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 12px;
-  color: #333;
-  font-weight: bold;
+  transition: width 0.3s ease-in-out;
 }
 
 /* ========== TOMBOL AKSI ========== */
@@ -192,18 +181,6 @@ body {
   100% { transform: scale(2); opacity: 0; }
 }
 
-/* ========== COIN FLY EFFECT ========== */
-.coin-fly {
-  position: absolute;
-  font-size: 24px;
-  z-index: 9999;
-  animation: flyUp 1s ease-out forwards;
-}
-@keyframes flyUp {
-  0%   { transform: translateY(0); opacity: 1; }
-  100% { transform: translateY(-100px); opacity: 0; }
-}
-
 /* ========== HADIAH JATUH ========== */
 #hadiah-container {
   position: fixed;
@@ -223,21 +200,13 @@ body {
   animation: jatuh 2s ease-out forwards;
   z-index: 9;
 }
-
 @keyframes jatuh {
   0%   { transform: translate(-50%, -100px) rotate(0deg); opacity: 0; }
   30%  { opacity: 1; }
   100% { transform: translate(-50%, 180px) rotate(360deg); opacity: 1; }
 }
-/* ========== BUBBLE IKLAN ========== */
-@keyframes floatAround {
-  0%   { transform: translate(0, 0); }
-  25%  { transform: translate(15px, -10px); }
-  50%  { transform: translate(-10px, 15px); }
-  75%  { transform: translate(10px, -5px); }
-  100% { transform: translate(0, 0); }
-}
 
+/* ========== BUBBLE IKLAN ========== */
 #bubble-ad {
   position: absolute;
   width: 60px;
@@ -249,6 +218,13 @@ body {
   z-index: 10;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+}
+@keyframes floatAround {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(15px, -10px); }
+  50%  { transform: translate(-10px, 15px); }
+  75%  { transform: translate(10px, -5px); }
+  100% { transform: translate(0, 0); }
 }
 
 /* ========== LOG NOTIFIKASI ========== */
@@ -290,15 +266,16 @@ body {
   50%  { transform: translate(-50%, -20px) scale(1.1); opacity: 1; }
   100% { transform: translate(-50%, -40px) scale(1); opacity: 0; }
 }
+
+/* ========== INTERAKSI DASAR ========== */
 button,
 img,
 input,
 video {
   outline: none;
   border: none;
-  -webkit-tap-highlight-color: transparent; /* Hilangkan highlight biru di Android */
+  -webkit-tap-highlight-color: transparent;
 }
-
 button:focus,
 img:focus,
 input:focus,
@@ -309,4 +286,3 @@ img:active {
   transform: scale(0.95);
   transition: transform 0.1s;
 }
-
