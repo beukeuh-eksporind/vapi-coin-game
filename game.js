@@ -23,6 +23,7 @@ const Game = (() => {
   }
 
   function updateXPBar() {
+    const xp: 40;
     const maxXP = level * 100;
     const percent = Math.min((xp / maxXP) * 100, 100);
     const bar = document.getElementById("xp-bar");
