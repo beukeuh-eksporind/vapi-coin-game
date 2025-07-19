@@ -9,12 +9,19 @@
 <body>
   <!-- ========== TOP INFO BAR ========== -->
   <div class="top-bar">
+    <div class="top-col">👤 <span id="user-name">...</span></div>
     <div class="top-col">
       <div>IDR: <span id="idr">0</span></div>
       <button id="cairkan-btn" onclick="Game.cairkan()">Cairkan 💸</button>
     </div>
     <div class="top-col">XP: <span id="xp">0</span></div>
     <div class="top-col">COIN: <span id="coins">0</span></div>
+  </div>
+
+  <!-- LOGIN TAMU -->
+  <div id="login-form">
+    <input type="text" id="input-name" placeholder="Masukkan Nama Anda">
+    <button id="submit-name">Mulai</button>
   </div>
 
   <!-- ========== LOGO ========== -->
@@ -34,10 +41,11 @@
     </div>
 
     <!-- VIDEO BAYI -->
-    <video id="baby-video" autoplay loop muted onclick="Game.interaksiVideo()">
-  <source src="videos/baby-dance.webm" type="video/webm">
-  Video tidak didukung.
-</video>
+    <video id="baby-video" autoplay loop muted onclick="Game.interaksiVideo(event)">
+      <source src="videos/baby-dance.webm" type="video/webm">
+      Video tidak didukung.
+    </video>
+  </div>
 
   <!-- ========== ACTION BUTTONS ========== -->
   <div class="actions">
@@ -46,6 +54,10 @@
     <button onclick="Game.bagiKoin()">Bagikan 🔄</button>
   </div>
 
+  <!-- ========== ANIMASI KOIN ========== -->
+  <div id="coin-animation-wrapper"></div>
+
   <script src="game.js"></script>
+  <script src="auth.js"></script>
 </body>
 </html>
