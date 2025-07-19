@@ -82,11 +82,11 @@ body {
 }
 #baby-coin {
   position: absolute;
-  top: 20px;         /* atur ini agar pas di atas kepala */
+  top: 10px;         /* atur ini agar pas di atas kepala */
   align-items: center;
   transform: translateX(-50%);
   font-size: 32px;
-  z-index: 11;
+  z-index: 20;
   animation: popCoin 1s ease-in-out infinite alternate;
 }
 
