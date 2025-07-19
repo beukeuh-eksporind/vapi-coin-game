@@ -61,9 +61,27 @@
   <!-- ========== ANIMASI KOIN ========== -->
   <div id="coin-animation-wrapper"></div>
 
+  <!-- ========== BONUS POPUP & KOIN BONUS ========== -->
+  <div id="bonus-popup" class="bonus-popup">+50 KOIN! 🎁</div>
+  <div id="bonus-coins-container"></div>
+
   <!-- ========== SUARA ========== -->
   <audio id="coin-sound" src="sounds/coin.wav" preload="auto"></audio>
   <audio id="laugh-sound" src="sounds/baby-laugh.wav" preload="auto"></audio>
+
+  <!-- ========== MODAL IKLAN ========== -->
+  <div id="ads-modal" class="modal">
+    <div class="modal-content">
+      <p>🎥 Tonton iklan ini sebelum melanjutkan penarikan</p>
+      <button onclick="Exchange.iklanSelesai()">Saya sudah menonton</button>
+    </div>
+  </div>
+
+  <!-- ========== ADMIN TOOLS (RAHASIA) ========== -->
+  <div id="admin-tools" style="text-align:center; margin:20px; display:none;">
+    <input type="password" id="admin-kode" placeholder="Masukkan kode admin" />
+    <button onclick="Exchange.resetSemua(document.getElementById('admin-kode').value)">🔁 Reset Semua Data</button>
+  </div>
 
   <!-- ========== SCRIPT ========== -->
   <script src="config.js"></script>
@@ -71,16 +89,24 @@
   <script src="exchange.js"></script>
   <script src="game.js"></script>
   <script src="auth.js"></script>
+  <script src="bonus-harian.js"></script>
 
   <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    Exchange.tampilkanRiwayat();
-    BonusHarian.cekDanKlaim();
-  });
+    document.addEventListener("DOMContentLoaded", () => {
+      Exchange.tampilkanRiwayat();
+      BonusHarian.cekDanKlaim();
+    });
+
+    // Aktifkan halaman admin saat Ctrl + R + A ditekan
+    document.addEventListener("keydown", (e) => {
+      if (e.ctrlKey && e.key.toLowerCase() === "r") {
+        document.addEventListener("keydown", (e2) => {
+          if (e2.key.toLowerCase() === "a") {
+            document.getElementById("admin-tools").style.display = "block";
+          }
+        }, { once: true });
+      }
+    });
   </script>
-  <!-- BONUS ANIMASI -->
-<div id="bonus-popup" class="bonus-popup">+50 KOIN! 🎁</div>
-  <!-- ANIMASI KOIN BONUS -->
-<div id="bonus-coins-container"></div>
 </body>
 </html>
