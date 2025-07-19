@@ -105,6 +105,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 10;
+  width: auto;
   z-index: 10;
   min-width: 130px;
 }
