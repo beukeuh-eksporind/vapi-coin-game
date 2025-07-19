@@ -1,54 +1,53 @@
-// === wallet.js ===
 const Wallet = {
-  saldo: 0,
+  xp: parseInt(localStorage.getItem("xp")) || 0,
+  coins: parseInt(localStorage.getItem("coins")) || 0,
+  level: parseInt(localStorage.getItem("level")) || 1,
 
-  tarikUang: function(jumlah) {
-    jumlah = parseInt(jumlah);
-    if (isNaN(jumlah)) {
-      alert("Jumlah tidak valid.");
-      return;
-    }
+  tambahCoin: function (jumlah) {
+    this.coins += jumlah;
+    localStorage.setItem("coins", this.coins);
+    document.getElementById("coins").textContent = this.coins;
+    document.getElementById("idr").textContent = this.coins * 1; // 1 koin = Rp.1
 
-    if (jumlah < 1000) {
-      alert("Minimal tarik Rp.1000.");
-      return;
-    }
-
-    if (jumlah > koin) {
-      alert("Koin tidak cukup.");
-      return;
-    }
-
-    // Lanjut proses penarikan
-    this.saldo += jumlah;
-    koin -= jumlah;
-
-    this.updateIDR();
-    updateKoin();
-    Exchange.tambahRiwayat(jumlah);
-    simpanData();
-
-    alert("Berhasil ditarik Rp." + jumlah);
+    // Mainkan suara coin
+    const sound = document.getElementById("coin-sound");
+    if (sound) sound.play();
   },
 
-  updateIDR: function() {
-    const idrDisplay = document.getElementById("idr");
-    if (idrDisplay) {
-      idrDisplay.textContent = this.saldo;
+  tambahXP: function (jumlah) {
+    this.xp += jumlah;
+    const nextLevelXP = this.level * 100;
+
+    // Naik level jika XP cukup
+    if (this.xp >= nextLevelXP) {
+      this.level++;
+      this.xp = this.xp - nextLevelXP;
+      localStorage.setItem("level", this.level);
+      document.getElementById("level").textContent = this.level;
     }
+
+    localStorage.setItem("xp", this.xp);
+    this.updateXPBar();
+    document.getElementById("xp").textContent = this.xp;
   },
 
-  simpan: function() {
-    localStorage.setItem("vapiSaldo", this.saldo);
+  updateXPBar: function () {
+    const xpBar = document.getElementById("xp-bar");
+    const percent = (this.xp / (this.level * 100)) * 100;
+    xpBar.style.width = `${percent}%`;
+    xpBar.setAttribute("data-percent", percent.toFixed(0));
   },
 
-  muat: function() {
-    this.saldo = parseInt(localStorage.getItem("vapiSaldo")) || 0;
-    this.updateIDR();
+  inisialisasi: function () {
+    document.getElementById("coins").textContent = this.coins;
+    document.getElementById("idr").textContent = this.coins * 1;
+    document.getElementById("xp").textContent = this.xp;
+    document.getElementById("level").textContent = this.level;
+    this.updateXPBar();
   }
 };
 
-// Panggil otomatis saat halaman load
+// Jalankan saat halaman dimuat
 document.addEventListener("DOMContentLoaded", () => {
-  Wallet.muat();
+  Wallet.inisialisasi();
 });
