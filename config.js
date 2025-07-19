@@ -1,13 +1,17 @@
-// === config.js ===
-// Konfigurasi utama VapiCoin Game
-
 const Config = {
-  // Rasio konversi: 1 koin = Rp1
-  rasioKoin: 1, // jadi 1000 koin = Rp.1000
+  namaGame: "VapiCoin",
+  versi: "1.0.0",
 
-  // Batas minimal penarikan
-  minWithdraw: 1000, // Pengguna bisa tarik mulai Rp.1000
+  // Minimal coin untuk bisa tarik uang
+  minimalPenarikan: 1000,
 
-  // Batas penarikan per hari (hanya 1x per hari)
-  batasPenarikanPerHari: 1
+  // Admin WA untuk backup manual (tidak wajib)
+  adminWhatsApp: "081282541982",
+
+  // Rate tukar: 1 coin = Rp 1
+  rateTukar: 1,
+
+  getInfoPenarikan: function () {
+    return `Minimal penarikan adalah Rp ${this.minimalPenarikan.toLocaleString('id-ID')}.`;
+  }
 };
