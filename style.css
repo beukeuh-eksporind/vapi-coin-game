@@ -72,12 +72,13 @@ body {
 }
 
 /* ========== VIDEO BAYI ========== */
-  #character-wrapper {
-  position: relative;
+  #character-wrapper {  
+  position: relative;  
+  z-index: 5;  
   display: flex;
   justify-content: center;
   align-items: center;
-  }
+  padding: 10px 0;
 }
 
   #baby-video {  
@@ -136,13 +137,6 @@ body {
   box-shadow: 0 0 8px #00ffcc;
 }
 
-
-#xp-bar {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(to right, #4caf50, #81c784);
-  transition: width 0.3s ease-in-out;
-}
 #xp-bar::after {
   content: attr(data-percent) "%";
   position: absolute;
