@@ -12,7 +12,7 @@
     <div class="top-col">👤 <span id="user-name">...</span></div>
     <div class="top-col">
       <div>IDR: <span id="idr">0</span></div>
-      <button id="cairkan-btn" onclick="Game.cairkan()">Cairkan 💸</button>
+      <button id="cairkan-btn" onclick="Exchange.tampilkanFormTukar()">Tarik Uang Otomatis 💸</button>
     </div>
     <div class="top-col">XP: <span id="xp">0</span></div>
     <div class="top-col">COIN: <span id="coins">0</span></div>
@@ -54,10 +54,23 @@
     <button onclick="Game.bagiKoin()">Bagikan 🔄</button>
   </div>
 
+  <!-- ========== RIWAYAT PENARIKAN ========== -->
+  <div id="riwayat"></div>
+
   <!-- ========== ANIMASI KOIN ========== -->
   <div id="coin-animation-wrapper"></div>
 
+  <script src="config.js"></script>
+  <script src="wallet.js"></script>
+  <script src="exchange.js"></script>
   <script src="game.js"></script>
   <script src="auth.js"></script>
+
+  <script>
+    // Tampilkan riwayat saat halaman dibuka
+    document.addEventListener("DOMContentLoaded", () => {
+      Exchange.tampilkanRiwayat();
+    });
+  </script>
 </body>
 </html>
