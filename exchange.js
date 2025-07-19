@@ -1,58 +1,64 @@
-// === exchange.js: Penarikan Otomatis Tanpa Admin ===
+// === exchange.js ===
+const Exchange = {
+  tampilkanFormTukar: function () {
+    const jumlah = prompt("Masukkan jumlah koin yang ingin ditarik:");
+    const nominal = parseInt(jumlah);
+    if (!isNaN(nominal)) {
+      Wallet.tarikUang(nominal);
+    } else {
+      alert("Input tidak valid.");
+    }
+  },
 
-const Exchange = (() => { const KONVERSI = Config.rasioKoin; const MIN_COINS = Config.minWithdraw;
+  tambahRiwayat: function (jumlah) {
+    const data = JSON.parse(localStorage.getItem("riwayatTukar") || "[]");
 
-function formatRupiah(amount) { return "Rp " + amount.toLocaleString("id-ID"); }
+    const penarikan = {
+      tgl: new Date().toLocaleString("id-ID"),
+      jumlah: jumlah
+    };
 
-function tampilkanFormTukar() { const koinSekarang = Wallet.getCoins();
+    data.push(penarikan);
+    localStorage.setItem("riwayatTukar", JSON.stringify(data));
+    this.tampilkanRiwayat();
+    Wallet.simpan();
+  },
 
-if (!Wallet.canWithdraw(Config.batasPenarikanPerHari)) {
-  alert("Kamu sudah menarik koin hari ini. Coba lagi besok ya!");
-  return;
-}
+  tampilkanRiwayat: function () {
+    const riwayat = JSON.parse(localStorage.getItem("riwayatTukar") || "[]");
+    const riwayatDiv = document.getElementById("riwayat");
+    if (!riwayatDiv) return;
 
-if (koinSekarang < MIN_COINS) {
-  alert(`Minimal ${MIN_COINS} koin (${formatRupiah(MIN_COINS / 100 * KONVERSI)}) untuk penarikan.`);
-  return;
-}
+    if (riwayat.length === 0) {
+      riwayatDiv.innerHTML = "<h3>Riwayat Penarikan</h3><p>Belum ada penarikan.</p>";
+    } else {
+      const listHTML = riwayat
+        .reverse()
+        .map(item => `<li><strong>${item.tgl}</strong>: Rp.${item.jumlah}</li>`)
+        .join("");
 
-const koinYangDitarik = Math.floor(koinSekarang / 100) * 100;
-const jumlahIDR = (koinYangDitarik / 100) * KONVERSI;
+      riwayatDiv.innerHTML = `
+        <h3>Riwayat Penarikan</h3>
+        <ul>${listHTML}</ul>
+      `;
+    }
 
-const konfirmasi = confirm(`Tukar ${koinYangDitarik} koin menjadi ${formatRupiah(jumlahIDR)}?`);
-if (konfirmasi) {
-  const sukses = Wallet.deductCoins(koinYangDitarik, "auto-withdraw");
-  if (sukses) {
-    alert(`Berhasil dicairkan: ${formatRupiah(jumlahIDR)} ke saldo virtual kamu. 🟢`);
-    tampilkanRiwayat();
-    Game && Game.updateDisplay && Game.updateDisplay();
-  } else {
-    alert("Gagal mencairkan. Saldo tidak cukup.");
+    // Tampilkan tombol reset kalau user adalah admin
+    const user = localStorage.getItem("vapiUser") || "";
+    if (user.toLowerCase() === "admin") {
+      const resetBtn = document.createElement("button");
+      resetBtn.textContent = "🔒 Reset Riwayat (Admin)";
+      resetBtn.style.marginTop = "10px";
+      resetBtn.onclick = this.resetRiwayat;
+      riwayatDiv.appendChild(resetBtn);
+    }
+  },
+
+  resetRiwayat: function () {
+    if (confirm("Yakin ingin menghapus semua riwayat penarikan di device ini?")) {
+      localStorage.removeItem("riwayatTukar");
+      Exchange.tampilkanRiwayat();
+      alert("Riwayat berhasil di-reset.");
+    }
   }
-}
-
-}
-
-function tampilkanRiwayat() { const history = Wallet.getHistory(); const wrapper = document.getElementById("riwayat"); if (!wrapper) return;
-
-wrapper.innerHTML = "<h3>Riwayat Transaksi</h3>";
-const list = document.createElement("ul");
-
-history.forEach(item => {
-  const li = document.createElement("li");
-  const waktu = new Date(item.time).toLocaleString("id-ID");
-  if (item.type === "add") {
-    li.innerText = `+${item.amount} koin dari ${item.source} • ${waktu}`;
-  } else {
-    const rupiah = formatRupiah(item.amount / 100 * KONVERSI);
-    li.innerText = `- ${item.amount} koin untuk ${item.reason} • ${waktu} • ${rupiah}`;
-  }
-  list.appendChild(li);
-});
-
-wrapper.appendChild(list);
-
-}
-
-return { tampilkanFormTukar, tampilkanRiwayat }; })();
-
+};
