@@ -29,9 +29,17 @@
     </div>  
   </div> 
   <!-- Karakter Bayi -->    
-  <div id="character-wrapper">  
-    <video id="baby-video" autoplay loop muted playsinline></video>  
-  </div>    
+  <div id="character-wrapper">
+  <!-- XP Bar di atas video -->
+  <div id="status-bar">
+    <div class="level">Lv. <span id="level">1</span></div>
+    <div id="xp-bar-container">
+      <div id="xp-bar" data-percent="0"></div>
+    </div>
+  </div>
+
+  <video id="baby-video" autoplay loop muted playsinline></video>
+  </div>
   <!-- Tombol Aksi -->    
   <div class="action-buttons">  
     <img src="images/harian-icon.png" onclick="Game.claimDaily()" alt="Harian">  
