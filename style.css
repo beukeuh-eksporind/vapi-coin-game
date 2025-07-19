@@ -74,11 +74,11 @@ body {
 /* ========== VIDEO BAYI ========== */
   #character-wrapper {  
   position: relative;  
-  z-index: 5;  
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 10px 0;
+  height: 240px;
 }
 
   #baby-video {  
@@ -91,40 +91,47 @@ body {
   position: relative;  
   border-radius: 10px; /* opsional, biar lebih halus */
 }
-/* ========== XP STATUS BAR ========== */
+/* XP BAR DI ATAS BAYI */
 #status-bar {
-  margin: 20px auto;
-  background: #ffffffdd;
-  border-radius: 10px;
-  padding: 6px 12px;
+  position: absolute;
+  top: 0; /* Posisikan di atas karakter */
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  padding: 6px 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: max-content;
+  z-index: 20;
+  min-width: 130px;
 }
 
+/* teks Lv. 10 */
 .level {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: bold;
-  color: #2c3e50;
+  color: #333;
+  margin-bottom: 3px;
 }
 
+/* Container XP bar */
 #xp-bar-container {
-  width: 150px;
-  height: 10px;
+  width: 120px;
+  height: 8px;
   background: #ddd;
-  border-radius: 5px;
+  border-radius: 4px;
   overflow: hidden;
-  position: relative;
 }
 
+/* Bar progress */
 #xp-bar {
   height: 100%;
-  width: 0%;
+  width: 0%; /* Ubah via JS */
   background: linear-gradient(to right, #4caf50, #81c784);
-  transition: width 0.3s ease-in-out;
-}
+  border-radius: 4px;
+  transition: width
 #xp-bar::after {
   content: attr(data-percent) "%";
   position: absolute;
