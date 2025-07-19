@@ -1,17 +1,12 @@
 const Config = {
-  namaGame: "VapiCoin",
-  versi: "1.0.0",
+  // Rate konversi koin ke rupiah
+  rateTukar: 1, // 1 coin = Rp1
 
-  // Minimal coin untuk bisa tarik uang
-  minimalPenarikan: 1000,
+  // Batas minimal penarikan dalam COIN
+  minimalPenarikan: 1000, // 1000 coin = Rp1.000
 
-  // Admin WA untuk backup manual (tidak wajib)
-  adminWhatsApp: "081282541982",
-
-  // Rate tukar: 1 coin = Rp 1
-  rateTukar: 1,
-
+  // Info penarikan yang ditampilkan ke user
   getInfoPenarikan: function () {
-    return `Minimal penarikan adalah Rp ${this.minimalPenarikan.toLocaleString('id-ID')}.`;
+    return `💡 Kamu perlu minimal ${this.minimalPenarikan} coin untuk bisa tarik uang. Terus kumpulkan ya!`;
   }
 };
