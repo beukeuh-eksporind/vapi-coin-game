@@ -1,130 +1,182 @@
-/* ========== RESET ========== */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Arial', sans-serif;
-}
+/* === style.css: Tampilan VapiCoin Game === */
 
 body {
-  background: linear-gradient(to bottom, #f3faff, #d0f0ff);
-  min-height: 100vh;
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to bottom, #d6f0ff, #ffffff);
+  color: #333;
   overflow-x: hidden;
 }
 
-/* ========== TOP BAR ========== */
 .top-bar {
-  background: #2c3e50;
-  color: white;
-  padding: 10px 20px;
   display: flex;
-  justify-content: space-around;
-  font-size: 14px;
+  justify-content: space-between;
+  padding: 12px;
+  background: #0077cc;
+  color: white;
   font-weight: bold;
+  flex-wrap: wrap;
 }
 
 .top-col {
-  display: flex;
+  margin: 4px 8px;
+}
+
+#login-form {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ffffffdd;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  display: none;
   flex-direction: column;
   align-items: center;
+  gap: 10px;
+  z-index: 10000;
 }
 
-#cairkan-btn {
-  margin-top: 4px;
-  background: #4caf50;
+#login-form input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 180px;
+}
+
+#login-form button {
+  padding: 8px 16px;
+  background: #2980b9;
   color: white;
   border: none;
-  padding: 4px 10px;
-  font-size: 12px;
   border-radius: 6px;
   cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-}
-#cairkan-btn:hover {
-  background: #43a047;
 }
 
-/* ========== LOGO ========== */
 .logo {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  margin-top: 20px;
-}
-
-.logo .awan {
-  width: 150px;
-  position: absolute;
-  top: -40px;
-  z-index: -1;
+  text-align: center;
+  margin: 20px 0;
 }
 
 .logo h1 {
-  font-size: 32px;
-  color: #333;
+  font-size: 2.2em;
+  color: #0077cc;
+  margin: 0;
 }
 
-/* ========== CHARACTER & XP ========== */
+.logo img.awan {
+  width: 60px;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
 #character-wrapper {
   text-align: center;
-  margin: 20px;
+  margin-bottom: 20px;
 }
 
 #baby-video {
-  width: 160px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  width: 240px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  cursor: pointer;
 }
 
 #status-bar {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 8px;
+  gap: 10px;
+  margin: 12px 0;
 }
 
 .level {
-  margin-right: 10px;
   font-weight: bold;
-  font-size: 14px;
-  color: #444;
+  color: #333;
 }
 
 #xp-bar-container {
-  width: 120px;
-  height: 10px;
-  background: #ccc;
-  border-radius: 5px;
+  width: 150px;
+  background: #eee;
+  border-radius: 6px;
   overflow: hidden;
+  height: 10px;
 }
 
 #xp-bar {
+  background: #00b894;
   height: 100%;
-  width: 0;
-  background: linear-gradient(to right, #4caf50, #81c784);
-  transition: width 0.3s;
+  width: 0%;
+  transition: width 0.4s ease;
 }
 
-/* ========== ACTION BUTTONS ========== */
 .actions {
   display: flex;
   justify-content: center;
-  gap: 10px;
-  margin: 20px 0;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .actions button {
   padding: 10px 16px;
-  border: none;
-  background: #2980b9;
+  background: #27ae60;
   color: white;
+  border: none;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 14px;
-  transition: background 0.2s;
+  font-size: 1em;
 }
 
 .actions button:hover {
-  background: #2471a3;
+  background: #219150;
+}
+
+#riwayat {
+  margin: 0 auto;
+  padding: 16px;
+  max-width: 400px;
+  background: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  font-size: 0.9em;
+}
+
+#riwayat h3 {
+  margin-top: 0;
+  text-align: center;
+  color: #333;
+}
+
+#riwayat ul {
+  list-style: none;
+  padding: 0;
+}
+
+#riwayat li {
+  margin-bottom: 8px;
+  padding: 6px 10px;
+  background: #ffffff;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.emoji-pop {
+  position: fixed;
+  font-size: 24px;
+  animation: floatUp 1s ease-out forwards;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-80px) scale(1.4);
+  }
 }
