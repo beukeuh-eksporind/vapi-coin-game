@@ -1,21 +1,31 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("login-form");
-  const userDisplay = document.getElementById("user-name");
+const Auth = {
+  inisialisasi: function () {
+    const nama = localStorage.getItem("namaPengguna");
 
-  const storedName = localStorage.getItem("vapiUser");
-  if (storedName) {
-    form.style.display = "none";
-    userDisplay.innerText = storedName;
-  } else {
-    form.style.display = "flex";
-  }
-
-  document.getElementById("submit-name").onclick = () => {
-    const name = document.getElementById("input-name").value.trim();
-    if (name) {
-      localStorage.setItem("vapiUser", name);
-      userDisplay.innerText = name;
-      form.style.display = "none";
+    if (nama) {
+      this.tampilkanNama(nama);
+      document.getElementById("login-form").style.display = "none";
+    } else {
+      document.getElementById("login-form").style.display = "flex";
     }
-  };
+
+    document.getElementById("submit-name").addEventListener("click", () => {
+      const input = document.getElementById("input-name");
+      const namaBaru = input.value.trim();
+      if (namaBaru.length > 0) {
+        localStorage.setItem("namaPengguna", namaBaru);
+        this.tampilkanNama(namaBaru);
+        document.getElementById("login-form").style.display = "none";
+      }
+    });
+  },
+
+  tampilkanNama: function (nama) {
+    document.getElementById("user-name").textContent = nama;
+  }
+};
+
+// Jalankan saat halaman dimuat
+document.addEventListener("DOMContentLoaded", () => {
+  Auth.inisialisasi();
 });
