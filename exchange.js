@@ -1,8 +1,8 @@
-// === exchange.js: Penukaran Koin ke Rupiah ===
+// === exchange.js: Penarikan Otomatis Tanpa Admin ===
 
 const Exchange = (() => {
-  const KONVERSI = 1000; // 100 koin = Rp1000
-  const MIN_COINS = 100;
+  const KONVERSI = Config.rasioKoin;
+  const MIN_COINS = Config.minWithdraw;
 
   function formatRupiah(amount) {
     return "Rp " + amount.toLocaleString("id-ID");
@@ -11,32 +11,56 @@ const Exchange = (() => {
   function tampilkanFormTukar() {
     const koinSekarang = Wallet.getCoins();
 
-    if (!Wallet.canWithdraw()) {
+    if (!Wallet.canWithdraw(Config.batasPenarikanPerHari)) {
       alert("Kamu sudah menarik koin hari ini. Coba lagi besok ya!");
       return;
     }
 
     if (koinSekarang < MIN_COINS) {
-      alert("Kamu butuh minimal 100 koin untuk bisa menukar.");
+      alert(`Minimal ${MIN_COINS} koin (${formatRupiah(MIN_COINS / 100 * KONVERSI)}) untuk penarikan.`);
       return;
     }
 
-    const jumlahIDR = Math.floor(koinSekarang / 100) * KONVERSI;
-    const konfirmasi = confirm(`Tukar ${koinSekarang} koin menjadi ${formatRupiah(jumlahIDR)}?`);
+    const koinYangDitarik = Math.floor(koinSekarang / 100) * 100;
+    const jumlahIDR = (koinYangDitarik / 100) * KONVERSI;
 
+    const konfirmasi = confirm(`Tukar ${koinYangDitarik} koin menjadi ${formatRupiah(jumlahIDR)}?`);
     if (konfirmasi) {
-      const sukses = Wallet.deductCoins(Math.floor(koinSekarang / 100) * 100, "withdraw-tukar");
+      const sukses = Wallet.deductCoins(koinYangDitarik, "auto-withdraw");
       if (sukses) {
-        alert(`Berhasil ditukar ${formatRupiah(jumlahIDR)}! Silakan hubungi admin untuk pencairan.`);
-        // Redirect atau tampilkan info WA admin di sini
-        window.open("https://wa.me/628xxxxxx?text=Halo%20admin,%20saya%20ingin%20menarik%20${formatRupiah(jumlahIDR)}%20dari%20VapiCoin.", "_blank");
+        alert(`Berhasil dicairkan: ${formatRupiah(jumlahIDR)} ke saldo virtual kamu. 🟢`);
+        tampilkanRiwayat();
       } else {
-        alert("Gagal menukar. Cek saldo kamu.");
+        alert("Gagal mencairkan. Saldo tidak cukup.");
       }
     }
   }
 
+  function tampilkanRiwayat() {
+    const history = Wallet.getHistory();
+    const wrapper = document.getElementById("riwayat");
+    if (!wrapper) return;
+
+    wrapper.innerHTML = "<h3>Riwayat Transaksi</h3>";
+    const list = document.createElement("ul");
+
+    history.forEach(item => {
+      const li = document.createElement("li");
+      const waktu = new Date(item.time).toLocaleString("id-ID");
+      if (item.type === "add") {
+        li.innerText = `+${item.amount} koin dari ${item.source} • ${waktu}`;
+      } else {
+        const rupiah = formatRupiah(item.amount / 100 * KONVERSI);
+        li.innerText = `- ${item.amount} koin untuk ${item.reason} • ${waktu} • ${rupiah}`;
+      }
+      list.appendChild(li);
+    });
+
+    wrapper.appendChild(list);
+  }
+
   return {
-    tampilkanFormTukar
+    tampilkanFormTukar,
+    tampilkanRiwayat
   };
 })();
