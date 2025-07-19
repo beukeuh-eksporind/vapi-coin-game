@@ -20,6 +20,11 @@ function tambahXP(jumlah) {
   updateXP();
   simpanData();
 }
+function updateIDR() {
+  const idrDisplay = document.getElementById("idr");
+  const konversi = Math.floor(koin); // 1 coin = Rp.1
+  idrDisplay.textContent = konversi;
+}
 
 function updateKoin() {
   koinDisplay.textContent = koin;
