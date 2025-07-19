@@ -90,3 +90,22 @@ body {
   90% { opacity: 1; }
   100% { opacity: 0; transform: translate(-50%, -20px); }
 }
+#xp-bar-container {
+  width: 80%;
+  height: 10px;
+  background: #e0e0e0;
+  margin: 5px auto;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+#xp-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(to right, #ff9900, #ffcc00);
+  transition: width 0.4s ease;
+}
+
+.level {
+  display: none; /* tidak dipakai lagi karena XP bar di logo */
+}
