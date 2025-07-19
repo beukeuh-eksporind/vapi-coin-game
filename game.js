@@ -36,7 +36,10 @@ const Game = (() => {
       laughSound.play();
     }
   }
-
+function interaksiVideo() {
+  laughSound.play();
+  alert("Hihi! Bayinya senang kamu sentuh! 👶✨");
+}
   function kumpulkanKoin() {
     coins += 10;
     xp += 15;
