@@ -32,6 +32,11 @@ function updateKoin() {
 
 function updateXP() {
   xpDisplay.textContent = xp;
+  const xpPercent = Math.min(100, (xp % 100));
+  const xpBar = document.getElementById("xp-bar");
+  if (xpBar) {
+    xpBar.style.width = xpPercent + "%";
+  }
 }
 
 function playCoinSound() {
