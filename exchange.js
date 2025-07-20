@@ -4,20 +4,17 @@ const Exchange = {
     const terakhirTarik = localStorage.getItem("terakhirTarik");
     const hariIni = new Date().toDateString();
 
-    if (coinSaatIni < Config.minimalPenarikan / Config.getRateTukarDinamis()) {
+    if (coinSaatIni < Config.minimalPenarikan) {
       alert(Config.getInfoPenarikan());
       return;
     }
 
     if (terakhirTarik === hariIni) {
-      alert("⚠️ Kamu sudah menarik hari ini. Coba lagi besok!");
+      alert("⚠️ Kamu sudah melakukan penarikan hari ini. Coba lagi besok!");
       return;
     }
 
-    this.tampilkanIklan(); // ⬅️ Wajib nonton iklan
-  },
-
-  tampilkanIklan: function () {
+    // Tampilkan modal iklan dulu sebelum tarik
     const modal = document.getElementById("ads-modal");
     if (modal) modal.style.display = "flex";
   },
@@ -25,26 +22,27 @@ const Exchange = {
   iklanSelesai: function () {
     const modal = document.getElementById("ads-modal");
     if (modal) modal.style.display = "none";
-    this.prosesPenarikan();
-  },
 
-  prosesPenarikan: function () {
     const coinSaatIni = parseInt(localStorage.getItem("coins") || "0");
-    const rate = Config.getRateTukarDinamis();
-    const nominal = Math.floor(coinSaatIni * rate);
+    const nominal = coinSaatIni * Config.rateTukar;
     const nama = localStorage.getItem("namaPengguna") || "Pengguna";
 
+    // Simulasi penarikan otomatis
     alert(`💸 ${nama}, kamu menarik Rp${nominal.toLocaleString('id-ID')}! Dana sedang diproses otomatis.`);
 
+    // Simpan riwayat
     const riwayat = JSON.parse(localStorage.getItem("riwayatPenarikan") || "[]");
     riwayat.push({
       tanggal: new Date().toLocaleString('id-ID'),
       jumlah: nominal
     });
     localStorage.setItem("riwayatPenarikan", JSON.stringify(riwayat));
-    localStorage.setItem("terakhirTarik", new Date().toDateString());
 
-    // Reset
+    // Tandai sudah tarik hari ini
+    const hariIni = new Date().toDateString();
+    localStorage.setItem("terakhirTarik", hariIni);
+
+    // Reset coin & XP
     localStorage.setItem("coins", "0");
     localStorage.setItem("xp", "0");
 
@@ -78,6 +76,7 @@ const Exchange = {
     localStorage.setItem("level", "1");
 
     alert("✅ Semua data pengguna berhasil direset.");
+
     Wallet.inisialisasi();
     this.tampilkanRiwayat();
   }
