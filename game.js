@@ -1,76 +1,53 @@
 const Game = {
-  koinPerTap: 1,
-  xpPerTap: 5,
+  nilaiPerTap: 1,
+  nilaiXpPerTap: 1,
 
   interaksiVideo: function (event) {
-    Game.tambahKoin(Game.koinPerTap);
-    Game.tambahXP(Game.xpPerTap);
-    Game.putarSuaraKoin();
-    Game.animasiKoin(event.clientX, event.clientY);
-  },
+    // Hilangkan ikon tunjuk jika ada
+    const icon = document.getElementById("tap-hand-icon");
+    if (icon) icon.remove();
 
-  tambahKoin: function (jumlah) {
-    let coins = parseInt(localStorage.getItem("coins") || "0");
-    coins += jumlah;
-    localStorage.setItem("coins", coins);
-    Wallet.perbaruiTampilan();
-  },
+    Wallet.tambahKoin(this.nilaiPerTap);
+    Wallet.tambahXp(this.nilaiXpPerTap);
 
-  tambahXP: function (jumlah) {
-    let xp = parseInt(localStorage.getItem("xp") || "0");
-    let level = parseInt(localStorage.getItem("level") || "1");
-
-    xp += jumlah;
-    const xpDibutuhkan = Game.xpUntukNaikLevel(level);
-
-    if (xp >= xpDibutuhkan) {
-      xp = xp - xpDibutuhkan;
-      level++;
-      localStorage.setItem("level", level);
-    }
-
-    localStorage.setItem("xp", xp);
-    Wallet.perbaruiTampilan();
-  },
-
-  xpUntukNaikLevel: function (level) {
-    return 100 + (level - 1) * 50;
-  },
-
-  putarSuaraKoin: function () {
-    const sound = document.getElementById("coin-sound");
-    if (sound) {
-      sound.currentTime = 0;
-      sound.play();
-    }
-  },
-
-  animasiKoin: function (x, y) {
-    const wrapper = document.getElementById("coin-animation-wrapper");
-    if (!wrapper) return;
-
-    const coin = document.createElement("div");
-    coin.className = "coin";
-    coin.style.left = x + "px";
-    coin.style.top = y + "px";
-    coin.textContent = "🪙";
-
-    wrapper.appendChild(coin);
-
-    setTimeout(() => {
-      wrapper.removeChild(coin);
-    }, 1000);
+    this.mainkanSuara("coin-sound");
+    this.animasiKoin(event.clientX, event.clientY);
   },
 
   putarDadu: function () {
     const hasil = Math.floor(Math.random() * 6) + 1;
-    const koinBonus = hasil * 5;
-    Game.tambahKoin(koinBonus);
-    Game.tambahXP(hasil * 2);
-    alert(`🎲 Kamu mendapat angka ${hasil} → +${koinBonus} koin!`);
+    alert("🎲 Kamu mendapatkan angka: " + hasil);
+    const bonus = hasil;
+    Wallet.tambahKoin(bonus);
+    Wallet.tambahXp(bonus);
   },
 
   bagiKoin: function () {
-    alert("🔄 Fitur berbagi koin belum tersedia di versi ini.");
+    const bonus = 3;
+    alert("📣 Terima kasih sudah berbagi! Bonus +3 koin & XP");
+    Wallet.tambahKoin(bonus);
+    Wallet.tambahXp(bonus);
+  },
+
+  animasiKoin: function (x, y) {
+    const wrapper = document.getElementById("coin-animation-wrapper");
+    const el = document.createElement("div");
+    el.className = "coin";
+    el.style.left = x + "px";
+    el.style.top = y + "px";
+    el.innerText = "+1 🪙";
+    wrapper.appendChild(el);
+
+    setTimeout(() => {
+      el.remove();
+    }, 1000);
+  },
+
+  mainkanSuara: function (id) {
+    const audio = document.getElementById(id);
+    if (audio) {
+      audio.currentTime = 0;
+      audio.play();
+    }
   }
 };
