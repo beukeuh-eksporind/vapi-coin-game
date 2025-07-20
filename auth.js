@@ -1,23 +1,30 @@
 const Auth = {
-  namaDefault: "Tamu",
-
   mulai: function () {
-    let nama = localStorage.getItem("namaPengguna");
+    const namaTersimpan = localStorage.getItem("namaPengguna");
 
-    // Jika belum ada nama, buat otomatis
-    if (!nama) {
-      const randomId = Math.floor(1000 + Math.random() * 9000); // 4 digit acak
-      nama = `${this.namaDefault}#${randomId}`;
-      localStorage.setItem("namaPengguna", nama);
+    if (namaTersimpan) {
+      this.loginSukses(namaTersimpan);
+    } else {
+      document.getElementById("login-form").style.display = "flex";
+      document.getElementById("submit-name").addEventListener("click", () => {
+        const namaInput = document.getElementById("input-name").value.trim();
+        if (namaInput.length < 3) {
+          alert("Nama terlalu pendek.");
+          return;
+        }
+        localStorage.setItem("namaPengguna", namaInput);
+        this.loginSukses(namaInput);
+      });
     }
+  },
 
-    // Tampilkan di UI
-    document.getElementById("user-name").textContent = nama;
-    Wallet.inisialisasi();
+  loginSukses: function (nama) {
+    document.getElementById("user-name").innerText = nama;
+    document.getElementById("login-form").style.display = "none";
   }
 };
 
-// Jalankan langsung
+// Jalankan saat halaman selesai dimuat
 document.addEventListener("DOMContentLoaded", () => {
   Auth.mulai();
 });
