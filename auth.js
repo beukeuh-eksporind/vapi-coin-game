@@ -1,28 +1,29 @@
-const Auth = {
-  mulai: function () {
-    const namaTersimpan = localStorage.getItem("namaPengguna");
+document.addEventListener("DOMContentLoaded", () => {
+  const namaTersimpan = localStorage.getItem("namaPengguna");
 
-    if (namaTersimpan) {
-      document.getElementById("user-name").textContent = namaTersimpan;
-      document.getElementById("login-form").style.display = "none";
+  if (namaTersimpan) {
+    // Jika sudah login sebelumnya
+    document.getElementById("login-form").style.display = "none";
+    Wallet.inisialisasi();
+    Game.perbaruiXP();
+  } else {
+    // Jika belum login, tampilkan form
+    document.getElementById("login-form").style.display = "flex";
+  }
+
+  document.getElementById("submit-name").addEventListener("click", () => {
+    const inputNama = document.getElementById("input-name").value.trim();
+    if (!inputNama) {
+      alert("⚠️ Silakan masukkan nama dulu.");
+      return;
     }
 
-    document.getElementById("submit-name").addEventListener("click", function () {
-      const namaInput = document.getElementById("input-name").value.trim();
+    // Simpan nama & sembunyikan form
+    localStorage.setItem("namaPengguna", inputNama);
+    document.getElementById("login-form").style.display = "none";
 
-      if (namaInput !== "") {
-        localStorage.setItem("namaPengguna", namaInput);
-        document.getElementById("user-name").textContent = namaInput;
-        document.getElementById("login-form").style.display = "none";
-        Wallet.inisialisasi();
-      } else {
-        alert("Silakan masukkan nama terlebih dahulu.");
-      }
-    });
-  }
-};
-
-// Panggil saat halaman selesai dimuat
-document.addEventListener("DOMContentLoaded", () => {
-  Auth.mulai();
+    // Mulai game
+    Wallet.inisialisasi();
+    Game.perbaruiXP();
+  });
 });
