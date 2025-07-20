@@ -132,6 +132,27 @@ body {
     transform: translateX(-50%) translateY(10px);
   }
 }
+#tap-hand {
+  position: absolute;
+  width: 60px; /* Ukuran kecil */
+  bottom: 100px; /* Naik sedikit dari bawah */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  animation: tapHint 1.2s infinite;
+  pointer-events: none; /* Supaya ga ganggu klik */
+}
+
+@keyframes tapHint {
+  0%, 100% {
+    transform: translate(-50%, 0);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate(-50%, -10px);
+    opacity: 0.4;
+  }
+}
 
 /* ======= TOMBOL AKSI ======= */
 .actions {
