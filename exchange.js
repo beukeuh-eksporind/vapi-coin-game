@@ -1,25 +1,23 @@
 const Exchange = {
-  pendingPenarikan: 0,
-
   tampilkanFormTukar: function () {
     const coinSaatIni = parseInt(localStorage.getItem("coins") || "0");
     const terakhirTarik = localStorage.getItem("terakhirTarik");
     const hariIni = new Date().toDateString();
 
-    if (coinSaatIni < Config.minimalPenarikan) {
+    if (coinSaatIni < Config.minimalPenarikan / Config.getRateTukarDinamis()) {
       alert(Config.getInfoPenarikan());
       return;
     }
 
     if (terakhirTarik === hariIni) {
-      alert("⚠️ Kamu sudah melakukan penarikan hari ini. Coba lagi besok!");
+      alert("⚠️ Kamu sudah menarik hari ini. Coba lagi besok!");
       return;
     }
 
-    // Simpan dulu jumlah penarikan yang akan diproses
-    this.pendingPenarikan = coinSaatIni;
+    this.tampilkanIklan(); // ⬅️ Wajib nonton iklan
+  },
 
-    // Tampilkan modal iklan dulu
+  tampilkanIklan: function () {
     const modal = document.getElementById("ads-modal");
     if (modal) modal.style.display = "flex";
   },
@@ -27,8 +25,13 @@ const Exchange = {
   iklanSelesai: function () {
     const modal = document.getElementById("ads-modal");
     if (modal) modal.style.display = "none";
+    this.prosesPenarikan();
+  },
 
-    const nominal = this.pendingPenarikan * Config.rateTukar;
+  prosesPenarikan: function () {
+    const coinSaatIni = parseInt(localStorage.getItem("coins") || "0");
+    const rate = Config.getRateTukarDinamis();
+    const nominal = Math.floor(coinSaatIni * rate);
     const nama = localStorage.getItem("namaPengguna") || "Pengguna";
 
     alert(`💸 ${nama}, kamu menarik Rp${nominal.toLocaleString('id-ID')}! Dana sedang diproses otomatis.`);
@@ -39,10 +42,12 @@ const Exchange = {
       jumlah: nominal
     });
     localStorage.setItem("riwayatPenarikan", JSON.stringify(riwayat));
-
     localStorage.setItem("terakhirTarik", new Date().toDateString());
+
+    // Reset
     localStorage.setItem("coins", "0");
     localStorage.setItem("xp", "0");
+
     Wallet.inisialisasi();
     this.tampilkanRiwayat();
   },
