@@ -44,7 +44,7 @@
     </video>
   </div>
 
-  <!-- ========== IKLAN (Placeholder) ========== -->
+  <!-- ========== IKLAN ========== -->
   <div id="ads-container" style="margin: 20px auto;">
     <p style="font-size:14px; color: gray;">[Iklan tampil di sini - tempel SDK/AdScript]</p>
   </div>
@@ -58,10 +58,8 @@
   <!-- ========== RIWAYAT PENARIKAN ========== -->
   <div id="riwayat"></div>
 
-  <!-- ========== ANIMASI KOIN ========== -->
+  <!-- ========== ANIMASI KOIN & BONUS ======= -->
   <div id="coin-animation-wrapper"></div>
-
-  <!-- ========== BONUS POPUP & KOIN BONUS ========== -->
   <div id="bonus-popup" class="bonus-popup">+50 KOIN! 🎁</div>
   <div id="bonus-coins-container"></div>
 
@@ -69,7 +67,7 @@
   <audio id="coin-sound" src="sounds/coin.wav" preload="auto"></audio>
   <audio id="laugh-sound" src="sounds/baby-laugh.wav" preload="auto"></audio>
 
-  <!-- ========== MODAL IKLAN ========== -->
+  <!-- ========== MODAL IKLAN (Penarikan) ========== -->
   <div id="ads-modal" class="modal">
     <div class="modal-content">
       <p>🎥 Tonton iklan ini sebelum melanjutkan penarikan</p>
@@ -96,11 +94,8 @@
       Exchange.tampilkanRiwayat();
       BonusHarian.cekDanKlaim();
     });
-    <script src="bonus-harian.js"></script>
-    <script src="auth.js"></script>
-    <script src="config.js"></script>
 
-    // Aktifkan halaman admin saat Ctrl + R + A ditekan
+    // Shortcut admin: Ctrl + R lalu A
     document.addEventListener("keydown", (e) => {
       if (e.ctrlKey && e.key.toLowerCase() === "r") {
         document.addEventListener("keydown", (e2) => {
