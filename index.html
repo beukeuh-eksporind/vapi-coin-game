@@ -3,108 +3,73 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VapiCoin</title>
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <title>VapiCoin - Game Penghasil Uang Digital</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      text-align: center;
+      background: linear-gradient(to bottom right, #e0f7fa, #ffffff);
+      padding: 40px 20px;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .hero {
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .hero h1 {
+      font-size: 2.8rem;
+      color: #0077b6;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: #444;
+      margin-bottom: 30px;
+    }
+
+    .cta-button {
+      background-color: #00796b;
+      color: white;
+      padding: 14px 26px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+
+    .cta-button:hover {
+      background-color: #004d40;
+    }
+
+    .screenshot {
+      margin-top: 40px;
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    .footer {
+      margin-top: 50px;
+      font-size: 14px;
+      color: #777;
+    }
+  </style>
 </head>
 <body>
-  <!-- ========== TOP INFO BAR ========== -->
-  <div class="top-bar">
-    <div class="top-col">👤 <span id="user-name">...</span></div>
-    <div class="top-col">
-      <div>IDR: <span id="idr">0</span></div>
-      <button id="cairkan-btn" onclick="Exchange.tampilkanFormTukar()">Tarik Uang Otomatis 💸</button>
-    </div>
-    <div class="top-col">XP: <span id="xp">0</span></div>
-    <div class="top-col">COIN: <span id="coins">0</span></div>
+  <div class="hero">
+    <h1>Selamat Datang di VapiCoin 👶🪙</h1>
+    <p>Mainkan game sederhana ini, kumpulkan koin, dan tukarkan menjadi uang tunai otomatis! 💸</p>
+    <a href="game.html" class="cta-button">Main Sekarang 🎮</a>
+    <img src="images/coin-bubble.png" alt="Game Preview" class="screenshot" />
   </div>
 
-  <!-- ========== LOGIN TAMU ========== -->
-  <div id="login-form">
-    <input type="text" id="input-name" placeholder="Masukkan Nama Anda">
-    <button id="submit-name">Mulai</button>
+  <div class="footer">
+    © 2025 VapiCoin by Pi & Va – Powered by cinta dan teknologi ☁️
   </div>
-
-  <!-- ========== LOGO & XP BAR ========== -->
-  <div class="logo">
-    <h1>VapiCoin</h1>
-    <div class="xp-header">
-      <span class="level-label">Lv.<span id="level">1</span></span>
-      <div id="xp-bar-container">
-        <div id="xp-bar" data-percent="0"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ========== VIDEO BAYI ========== -->
-  <div id="character-wrapper">
-    <video id="baby-video" autoplay loop muted onclick="Game.interaksiVideo(event)">
-      <source src="videos/baby-dance.webm" type="video/webm">
-      Video tidak didukung.
-    </video>
-  </div>
-
-  <!-- ========== IKLAN ========== -->
-  <div id="ads-container" style="margin: 20px auto;">
-    <p style="font-size:14px; color: gray;">[Iklan tampil di sini - tempel SDK/AdScript]</p>
-  </div>
-
-  <!-- ========== ACTION BUTTONS ========== -->
-  <div class="actions">
-    <button onclick="Game.putarDadu()">Putar Dadu 🎲</button>
-    <button onclick="Game.bagiKoin()">Bagikan 🔄</button>
-  </div>
-
-  <!-- ========== RIWAYAT PENARIKAN ========== -->
-  <div id="riwayat"></div>
-
-  <!-- ========== ANIMASI KOIN & BONUS ======= -->
-  <div id="coin-animation-wrapper"></div>
-  <div id="bonus-popup" class="bonus-popup">+50 KOIN! 🎁</div>
-  <div id="bonus-coins-container"></div>
-
-  <!-- ========== SUARA ========== -->
-  <audio id="coin-sound" src="sounds/coin.wav" preload="auto"></audio>
-  <audio id="laugh-sound" src="sounds/baby-laugh.wav" preload="auto"></audio>
-
-  <!-- ========== MODAL IKLAN (Penarikan) ========== -->
-  <div id="ads-modal" class="modal">
-    <div class="modal-content">
-      <p>🎥 Tonton iklan ini sebelum melanjutkan penarikan</p>
-      <button onclick="Exchange.iklanSelesai()">Saya sudah menonton</button>
-    </div>
-  </div>
-
-  <!-- ========== ADMIN TOOLS (RAHASIA) ========== -->
-  <div id="admin-tools" style="text-align:center; margin:20px; display:none;">
-    <input type="password" id="admin-kode" placeholder="Masukkan kode admin" />
-    <button onclick="Exchange.resetSemua(document.getElementById('admin-kode').value)">🔁 Reset Semua Data</button>
-  </div>
-
-  <!-- ========== SCRIPT ========== -->
-  <script src="config.js"></script>
-  <script src="wallet.js"></script>
-  <script src="exchange.js"></script>
-  <script src="game.js"></script>
-  <script src="auth.js"></script>
-  <script src="bonus-harian.js"></script>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      Exchange.tampilkanRiwayat();
-      BonusHarian.cekDanKlaim();
-    });
-
-    // Shortcut admin: Ctrl + R lalu A
-    document.addEventListener("keydown", (e) => {
-      if (e.ctrlKey && e.key.toLowerCase() === "r") {
-        document.addEventListener("keydown", (e2) => {
-          if (e2.key.toLowerCase() === "a") {
-            document.getElementById("admin-tools").style.display = "block";
-          }
-        }, { once: true });
-      }
-    });
-  </script>
 </body>
 </html>
