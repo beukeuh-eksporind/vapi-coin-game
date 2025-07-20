@@ -20,7 +20,7 @@
   </div>
 
   <!-- ========== LOGIN TAMU ========== -->
-  <div id="login-form">
+  <div id="login-form" style="display:none;">
     <input type="text" id="input-name" placeholder="Masukkan Nama Anda">
     <button id="submit-name">Mulai</button>
   </div>
@@ -42,14 +42,12 @@
       <source src="videos/baby-dance.webm" type="video/webm">
       Video tidak didukung.
     </video>
+    <img id="tap-hint" src="images/tap-hand.png" alt="Tap hint" />
   </div>
 
-  <!-- ========== PETUNJUK TUNJUK TANGAN ========== -->
-  <img id="tunjuk-petunjuk" src="images/tunjuk.png" alt="Tap di sini" style="display: none;">
-
-  <!-- ========== IKLAN ========== -->
-  <div id="ads-container" style="margin: 20px auto;">
-    <p style="font-size:14px; color: gray;">[Iklan tampil di sini - tempel SDK/AdScript]</p>
+  <!-- ========== IKLAN (Placeholder) ========== -->
+  <div id="ads-container">
+    <p>[Iklan tampil di sini - pasang SDK]</p>
   </div>
 
   <!-- ========== ACTION BUTTONS ========== -->
@@ -61,14 +59,28 @@
   <!-- ========== RIWAYAT PENARIKAN ========== -->
   <div id="riwayat"></div>
 
-  <!-- ========== ANIMASI ========== -->
+  <!-- ========== ANIMASI KOIN & BONUS ========== -->
   <div id="coin-animation-wrapper"></div>
-  <div id="bonus-popup" class="bonus-popup">+50 KOIN! 🎁</div>
   <div id="bonus-coins-container"></div>
+  <div id="bonus-popup" class="bonus-popup">+50 KOIN! 🎁</div>
 
   <!-- ========== SUARA ========== -->
   <audio id="coin-sound" src="sounds/coin.wav" preload="auto"></audio>
   <audio id="laugh-sound" src="sounds/baby-laugh.wav" preload="auto"></audio>
+
+  <!-- ========== MODAL IKLAN ========== -->
+  <div id="ads-modal" class="modal">
+    <div class="modal-content">
+      <p>🎥 Tonton iklan ini sebelum tarik uang</p>
+      <button onclick="Exchange.iklanSelesai()">Saya sudah menonton</button>
+    </div>
+  </div>
+
+  <!-- ========== ADMIN TOOLS ========== -->
+  <div id="admin-tools" style="text-align:center; margin:20px; display:none;">
+    <input type="password" id="admin-kode" placeholder="Masukkan kode admin" />
+    <button onclick="Exchange.resetSemua(document.getElementById('admin-kode').value)">🔁 Reset Semua Data</button>
+  </div>
 
   <!-- ========== SCRIPT ========== -->
   <script src="config.js"></script>
@@ -82,14 +94,10 @@
     document.addEventListener("DOMContentLoaded", () => {
       Exchange.tampilkanRiwayat();
       BonusHarian.cekDanKlaim();
-
-      if (!localStorage.getItem("sudahTap")) {
-        const petunjuk = document.getElementById("tunjuk-petunjuk");
-        if (petunjuk) petunjuk.style.display = "block";
-      }
+      Auth.cekLoginOtomatis(); // otomatis login
     });
 
-    // Aktifkan admin (Ctrl + R, lalu A)
+    // Aktifkan halaman admin jika Ctrl+R lalu A
     document.addEventListener("keydown", (e) => {
       if (e.ctrlKey && e.key.toLowerCase() === "r") {
         document.addEventListener("keydown", (e2) => {
