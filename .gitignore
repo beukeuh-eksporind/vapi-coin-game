@@ -1,1 +1,19 @@
+
+# Abaikan file konfigurasi pribadi
 config.js
+
+# Abaikan data lokal yang tidak penting
+.DS_Store
+*.log
+
+# Abaikan cache editor (opsional)
+.vscode/
+*.swp
+
+# Abaikan folder build/output jika kamu punya
+/dist/
+/build/
+/node_modules/
+
+# Abaikan file sistem lain
+Thumbs.db
