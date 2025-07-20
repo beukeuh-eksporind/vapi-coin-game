@@ -4,54 +4,62 @@ const Wallet = {
     const xp = parseInt(localStorage.getItem("xp") || "0");
     const level = parseInt(localStorage.getItem("level") || "1");
 
-    document.getElementById("coins").textContent = coins;
-    document.getElementById("xp").textContent = xp;
-    document.getElementById("level").textContent = level;
+    document.getElementById("coins").innerText = coins;
+    document.getElementById("xp").innerText = xp;
+    document.getElementById("level").innerText = level;
 
-    this.perbaruiXPBar(xp);
-    this.perbaruiIDR(coins);
+    this.updateXpBar(xp, level);
+    this.updateIDR(coins);
   },
 
-  tambahKoin: function (jumlah = 1) {
+  tambahKoin: function (jumlah) {
     let coins = parseInt(localStorage.getItem("coins") || "0");
     coins += jumlah;
     localStorage.setItem("coins", coins);
-    document.getElementById("coins").textContent = coins;
-    this.perbaruiIDR(coins);
+    document.getElementById("coins").innerText = coins;
+
+    this.updateIDR(coins);
   },
 
-  tambahXP: function (jumlah = 1) {
+  tambahXp: function (jumlah) {
     let xp = parseInt(localStorage.getItem("xp") || "0");
     let level = parseInt(localStorage.getItem("level") || "1");
-
     xp += jumlah;
-    const xpMax = level * 100;
 
-    if (xp >= xpMax) {
-      xp -= xpMax;
-      level++;
+    const batas = this.batasXp(level);
+    if (xp >= batas) {
+      xp = xp - batas;
+      level += 1;
       localStorage.setItem("level", level);
-      document.getElementById("level").textContent = level;
+      document.getElementById("level").innerText = level;
     }
 
     localStorage.setItem("xp", xp);
-    document.getElementById("xp").textContent = xp;
-    this.perbaruiXPBar(xp, xpMax);
+    document.getElementById("xp").innerText = xp;
+
+    this.updateXpBar(xp, level);
   },
 
-  perbaruiXPBar: function (xp, xpMax = null) {
-    const level = parseInt(localStorage.getItem("level") || "1");
-    if (!xpMax) xpMax = level * 100;
-
-    const percent = (xp / xpMax) * 100;
-    const xpBar = document.getElementById("xp-bar");
-    xpBar.style.width = `${percent}%`;
-    xpBar.setAttribute("data-percent", percent.toFixed(1));
+  batasXp: function (level) {
+    return 10 + level * 5; // Makin tinggi level, makin banyak XP dibutuhkan
   },
 
-  perbaruiIDR: function (coins) {
+  updateXpBar: function (xp, level) {
+    const bar = document.getElementById("xp-bar");
+    const batas = this.batasXp(level);
+    const persen = Math.min(100, Math.floor((xp / batas) * 100));
+    bar.style.width = persen + "%";
+    bar.setAttribute("data-percent", persen);
+  },
+
+  updateIDR: function (coins) {
     const rate = Config.rateTukar;
-    const rupiah = coins * rate;
-    document.getElementById("idr").textContent = rupiah.toLocaleString("id-ID");
+    const idr = coins * rate;
+    document.getElementById("idr").innerText = idr.toLocaleString("id-ID");
   }
 };
+
+// Inisialisasi saat halaman dimuat
+document.addEventListener("DOMContentLoaded", () => {
+  Wallet.inisialisasi();
+});
