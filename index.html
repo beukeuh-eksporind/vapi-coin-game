@@ -1,15 +1,14 @@
-<!-- index.html FINAL dengan integrasi misi harian -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>VapiCoin</title>
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- ========== TOP INFO BAR ========== -->
+  <!-- ========== TOP BAR ========== -->
   <div class="top-bar">
     <div class="top-col">👤 <span id="user-name">...</span></div>
     <div class="top-col">
@@ -20,13 +19,13 @@
     <div class="top-col">COIN: <span id="coins">0</span></div>
   </div>
 
-  <!-- ========== LOGIN TAMU ========== -->
-  <div id="login-form" style="display:none;">
-    <input type="text" id="input-name" placeholder="Masukkan Nama Anda">
+  <!-- ========== LOGIN FORM ========== -->
+  <div id="login-form" style="display: none;">
+    <input type="text" id="input-name" placeholder="Masukkan Nama Anda" />
     <button id="submit-name">Mulai</button>
   </div>
 
-  <!-- ========== LOGO & XP BAR ========== -->
+  <!-- ========== LOGO + XP HEADER ========== -->
   <div class="logo">
     <h1>VapiCoin</h1>
     <div class="xp-header">
@@ -37,10 +36,10 @@
     </div>
   </div>
 
-  <!-- ========== VIDEO BAYI ========== -->
+  <!-- ========== VIDEO BAYI & TAP HINT ========== -->
   <div id="character-wrapper">
-    <video id="baby-video" autoplay loop muted onclick="Game.interaksiVideo(event)">
-      <source src="videos/baby-dance.webm" type="video/webm">
+    <video id="baby-video" autoplay loop muted onclick="Game.interaksiVideo(event)" playsinline>
+      <source src="videos/baby-dance.webm" type="video/webm" />
       Video tidak didukung.
     </video>
     <img id="tap-hand" src="images/tap-hand.png" alt="Tap hint" />
@@ -52,19 +51,16 @@
     <button onclick="Game.bagiKoin()">Bagikan 🔄</button>
   </div>
 
-  <!-- ========== MISI HARIAN ========== -->
-  <div id="misi-harian" style="text-align:center; margin-top:10px;"></div>
-
   <!-- ========== RIWAYAT PENARIKAN ========== -->
   <div id="riwayat"></div>
 
-  <!-- ========== RIWAYAT USER (otomatis dari backend) ========== -->
+  <!-- ========== RIWAYAT USER ========== -->
   <div id="riwayat-user" class="riwayat-box">
     <h3>Riwayat Pemain</h3>
     <ul id="riwayat-user-list"></ul>
   </div>
 
-  <!-- ========== ANIMASI BONUS & KOIN ========== -->
+  <!-- ========== ANIMASI KOIN & BONUS ========== -->
   <div id="coin-animation-wrapper"></div>
   <div id="bonus-coins-container"></div>
   <div id="bonus-popup" class="bonus-popup">+50 KOIN! 🎁</div>
@@ -94,18 +90,16 @@
   <script src="game.js"></script>
   <script src="auth.js"></script>
   <script src="bonus-harian.js"></script>
-  <script src="misi-harian.js"></script>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       Exchange.tampilkanRiwayat();
       BonusHarian.cekDanKlaim();
       Auth.cekLoginOtomatis();
-      MisiHarian.init();
-      MisiHarian.tampilkanStatus();
       tampilkanRiwayatUser();
     });
 
+    // Ctrl+R lalu A untuk buka admin tools
     document.addEventListener("keydown", (e) => {
       if (e.ctrlKey && e.key.toLowerCase() === "r") {
         document.addEventListener("keydown", (e2) => {
@@ -116,6 +110,7 @@
       }
     });
 
+    // Riwayat user dari backend
     function tampilkanRiwayatUser() {
       fetch('/api/users')
         .then(res => res.json())
