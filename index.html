@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- ========== TOP INFO BAR ========== -->
+  <!-- ========== TOP BAR ========== -->
   <div class="top-bar">
     <div class="top-col">👤 <span id="user-name">...</span></div>
     <div class="top-col">
@@ -19,13 +19,13 @@
     <div class="top-col">COIN: <span id="coins">0</span></div>
   </div>
 
-  <!-- ========== LOGIN TAMU ========== -->
-  <div id="login-form" style="display:none;">
-    <input type="text" id="input-name" placeholder="Masukkan Nama Anda">
+  <!-- ========== FORM LOGIN (jika belum login) ========== -->
+  <div id="login-form" style="display: none;">
+    <input type="text" id="input-name" placeholder="Masukkan Nama Anda" />
     <button id="submit-name">Mulai</button>
   </div>
 
-  <!-- ========== LOGO & XP BAR ========== -->
+  <!-- ========== LOGO + XP ========== -->
   <div class="logo">
     <h1>VapiCoin</h1>
     <div class="xp-header">
@@ -36,21 +36,21 @@
     </div>
   </div>
 
-  <!-- ========== VIDEO BAYI ========== -->
+  <!-- ========== VIDEO BAYI & TAP HINT ========== -->
   <div id="character-wrapper">
     <video id="baby-video" autoplay loop muted onclick="Game.interaksiVideo(event)">
-      <source src="videos/baby-dance.webm" type="video/webm">
+      <source src="videos/baby-dance.webm" type="video/webm" />
       Video tidak didukung.
     </video>
     <img id="tap-hand" src="images/tap-hand.png" alt="Tap hint" />
   </div>
 
-  <!-- ========== IKLAN (Placeholder) ========== -->
+  <!-- ========== IKLAN (dummy) ========== -->
   <div id="ads-container">
     <p>[Iklan tampil di sini - pasang SDK]</p>
   </div>
 
-  <!-- ========== ACTION BUTTONS ========== -->
+  <!-- ========== TOMBOL AKSI ========== -->
   <div class="actions">
     <button onclick="Game.putarDadu()">Putar Dadu 🎲</button>
     <button onclick="Game.bagiKoin()">Bagikan 🔄</button>
@@ -59,7 +59,13 @@
   <!-- ========== RIWAYAT PENARIKAN ========== -->
   <div id="riwayat"></div>
 
-  <!-- ========== ANIMASI KOIN & BONUS ========== -->
+  <!-- ========== RIWAYAT USER (otomatis dari backend) ========== -->
+  <div id="riwayat-user" class="riwayat-box">
+    <h3>Riwayat Pemain</h3>
+    <ul id="riwayat-user-list"></ul>
+  </div>
+
+  <!-- ========== ANIMASI BONUS & KOIN ========== -->
   <div id="coin-animation-wrapper"></div>
   <div id="bonus-coins-container"></div>
   <div id="bonus-popup" class="bonus-popup">+50 KOIN! 🎁</div>
@@ -94,10 +100,11 @@
     document.addEventListener("DOMContentLoaded", () => {
       Exchange.tampilkanRiwayat();
       BonusHarian.cekDanKlaim();
-      Auth.cekLoginOtomatis(); // otomatis login
+      Auth.cekLoginOtomatis();
+      tampilkanRiwayatUser(); // backend
     });
 
-    // Aktifkan halaman admin jika Ctrl+R lalu A
+    // Ctrl+R lalu A => buka admin tools
     document.addEventListener("keydown", (e) => {
       if (e.ctrlKey && e.key.toLowerCase() === "r") {
         document.addEventListener("keydown", (e2) => {
@@ -107,6 +114,22 @@
         }, { once: true });
       }
     });
+
+    // Fungsi tampilkan riwayat dari backend
+    function tampilkanRiwayatUser() {
+      fetch('/api/users')
+        .then(res => res.json())
+        .then(users => {
+          const list = document.getElementById('riwayat-user-list');
+          list.innerHTML = '';
+          users.slice().reverse().forEach(user => {
+            const li = document.createElement('li');
+            li.textContent = `${user.nama} • 💰 ${user.coins} • XP ${user.xp} • Lv ${user.level}`;
+            list.appendChild(li);
+          });
+        })
+        .catch(err => console.error('Gagal ambil riwayat:', err));
+    }
   </script>
 </body>
 </html>
