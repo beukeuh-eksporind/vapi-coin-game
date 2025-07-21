@@ -314,3 +314,7 @@ html, body {
   border-radius: 8px;
   cursor: pointer;
   }
+/* ======= PERBAIKAN LONCATAN HALAMAN VIDEO ======= */
+#baby-video {
+  -webkit-tap-highlight-color: transparent;
+  touch-action
