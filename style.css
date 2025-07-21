@@ -116,9 +116,11 @@ html, body {
   user-select: none;
   display: block;
   max-width: 100%;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
-/* ======= TUNJUK ICON ======= */
+/* ======= ICON TUNJUK / TAP HINT ======= */
 #tap-hand {
   position: absolute;
   width: 60px;
@@ -195,15 +197,7 @@ html, body {
   border-bottom: 1px solid #ccc;
 }
 
-/* ======= IKLAN ======= */
-#ads-container {
-  text-align: center;
-  padding: 10px;
-  font-style: italic;
-  color: gray;
-}
-
-/* ======= ANIMASI COIN ======= */
+/* ======= ANIMASI KOIN ======= */
 #coin-animation-wrapper {
   position: fixed;
   pointer-events: none;
@@ -313,87 +307,4 @@ html, body {
   color: white;
   border-radius: 8px;
   cursor: pointer;
-  }
-/* ======= PERBAIKAN LONCATAN HALAMAN VIDEO ======= */
-#baby-video {
-  -webkit-tap-highlight-color: transparent;
-  touch-action
-  /* ======= FORM PENARIKAN MANUAL (POPUP) ======= */
-.withdraw-form {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: white;
-  padding: 24px 32px;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-  z-index: 99999;
-  width: 90%;
-  max-width: 400px;
-  font-family: 'Segoe UI', sans-serif;
-  display: none;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.withdraw-form.show {
-  display: flex;
-}
-
-.withdraw-form input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  font-size: 1rem;
-}
-
-.withdraw-form button {
-  padding: 10px 16px;
-  border: none;
-  background-color: #0288d1;
-  color: white;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s ease;
-}
-
-.withdraw-form button:hover {
-  background-color: #015a8c;
-}
-
-.withdraw-form .close-btn {
-  position: absolute;
-  top: 8px;
-  right: 12px;
-  font-size: 20px;
-  color: #888;
-  cursor: pointer;
-}
-
-/* ======= RESPONSIVE ======= */
-@media (max-width: 500px) {
-  .top-bar {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .xp-header {
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .actions {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  #login-form {
-    flex-direction: column;
-  }
-
-  .modal-content {
-    width: 90%;
-  }
 }
