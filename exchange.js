@@ -1,83 +1,60 @@
 const Exchange = {
-  tampilkanFormTukar: function () {
-    const coinSaatIni = parseInt(localStorage.getItem("coins") || "0");
-    const terakhirTarik = localStorage.getItem("terakhirTarik");
-    const hariIni = new Date().toDateString();
-
-    if (coinSaatIni < Config.minimalPenarikan) {
-      alert(Config.getInfoPenarikan());
+  tampilkanFormTukar: () => {
+    const koin = Wallet.ambilKoin();
+    if (koin < 10) {
+      alert("Kumpulkan minimal 10 koin untuk menarik uang.");
       return;
     }
 
-    if (terakhirTarik === hariIni) {
-      alert("⚠️ Kamu sudah melakukan penarikan hari ini. Coba lagi besok!");
-      return;
-    }
-
-    // Tampilkan modal iklan dulu sebelum tarik
-    const modal = document.getElementById("ads-modal");
-    if (modal) modal.style.display = "flex";
+    // Tampilkan modal iklan
+    document.getElementById("ads-modal").style.display = "block";
   },
 
-  iklanSelesai: function () {
-    const modal = document.getElementById("ads-modal");
-    if (modal) modal.style.display = "none";
+  iklanSelesai: () => {
+    const koin = Wallet.ambilKoin();
+    const idr = Wallet.ambilIDR();
 
-    const coinSaatIni = parseInt(localStorage.getItem("coins") || "0");
-    const nominal = coinSaatIni * Config.rateTukar;
-    const nama = localStorage.getItem("namaPengguna") || "Pengguna";
+    alert(`💸 Anda menarik Rp${idr}. Uang masuk otomatis!`);
+    localStorage.setItem("coins", 0);
+    Wallet.tampilkan();
+    Wallet.simpanKeServer();
 
-    // Simulasi penarikan otomatis
-    alert(`💸 ${nama}, kamu menarik Rp${nominal.toLocaleString('id-ID')}! Dana sedang diproses otomatis.`);
-
-    // Simpan riwayat
-    const riwayat = JSON.parse(localStorage.getItem("riwayatPenarikan") || "[]");
-    riwayat.push({
-      tanggal: new Date().toLocaleString('id-ID'),
-      jumlah: nominal
-    });
-    localStorage.setItem("riwayatPenarikan", JSON.stringify(riwayat));
-
-    // Tandai sudah tarik hari ini
-    const hariIni = new Date().toDateString();
-    localStorage.setItem("terakhirTarik", hariIni);
-
-    // Reset coin & XP
-    localStorage.setItem("coins", "0");
-    localStorage.setItem("xp", "0");
-
-    Wallet.inisialisasi();
-    this.tampilkanRiwayat();
+    document.getElementById("ads-modal").style.display = "none";
   },
 
-  tampilkanRiwayat: function () {
-    const riwayat = JSON.parse(localStorage.getItem("riwayatPenarikan") || "[]");
-    const div = document.getElementById("riwayat");
-    if (!div) return;
-
-    let html = "<h3>Riwayat Penarikan</h3><ul>";
-    riwayat.reverse().forEach(item => {
-      html += `<li>${item.tanggal} — Rp${item.jumlah.toLocaleString('id-ID')}</li>`;
-    });
-    html += "</ul>";
-    div.innerHTML = html;
+  resetSemua: (kode) => {
+    fetch("/api/admin/reset", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ kode })
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          alert("✅ Semua data berhasil direset.");
+        } else {
+          alert("❌ Gagal: " + data.error);
+        }
+      });
   },
 
-  resetSemua: function (kodeAdmin) {
-    if (kodeAdmin !== "vareset2025") {
-      alert("❌ Kode admin salah!");
-      return;
-    }
+  tampilkanRiwayat: () => {
+    fetch('/api/users')
+      .then(res => res.json())
+      .then(users => {
+        const div = document.getElementById("riwayat");
+        if (!div) return;
 
-    localStorage.removeItem("riwayatPenarikan");
-    localStorage.removeItem("terakhirTarik");
-    localStorage.setItem("coins", "0");
-    localStorage.setItem("xp", "0");
-    localStorage.setItem("level", "1");
-
-    alert("✅ Semua data pengguna berhasil direset.");
-
-    Wallet.inisialisasi();
-    this.tampilkanRiwayat();
+        div.innerHTML = `<h3>🧾 Riwayat Pengguna</h3>`;
+        users.forEach(u => {
+          const item = document.createElement("div");
+          item.className = "riwayat-item";
+          item.innerHTML = `👤 <strong>${u.nama}</strong> — 💰 ${u.coins} koin • 🧬 XP ${u.xp} • 🎯 Lv ${u.level}`;
+          div.appendChild(item);
+        });
+      })
+      .catch(err => {
+        console.error("❌ Gagal ambil riwayat:", err);
+      });
   }
 };
