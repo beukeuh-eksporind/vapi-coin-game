@@ -12,6 +12,8 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   position: relative;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* ======= TOP INFO BAR ======= */
@@ -110,37 +112,22 @@ body {
   box-shadow: 0 0 12px rgba(0,0,0,0.2);
   cursor: pointer;
   z-index: 1;
+  outline: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* ======= TUNJUK ICON ======= */
-#tap-hand-icon {
-  position: absolute;
-  width: 60px;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  animation: tap-bounce 1.5s infinite;
-  z-index: 10;
-  pointer-events: none;
-}
-
-@keyframes tap-bounce {
-  0%, 100% {
-    transform: translateX(-50%) translateY(0);
-  }
-  50% {
-    transform: translateX(-50%) translateY(10px);
-  }
-}
 #tap-hand {
   position: absolute;
-  width: 60px; /* Ukuran kecil */
-  bottom: 100px; /* Naik sedikit dari bawah */
+  width: 60px;
+  bottom: 100px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1000;
   animation: tapHint 1.2s infinite;
-  pointer-events: none; /* Supaya ga ganggu klik */
+  pointer-events: none;
 }
 
 @keyframes tapHint {
@@ -182,7 +169,7 @@ body {
 #riwayat {
   max-width: 600px;
   margin: 20px auto;
-  padding: 10px;
+  padding: 10px 20px;
   font-size: 14px;
   background: #f7f7f7;
   border-radius: 10px;
@@ -192,6 +179,7 @@ body {
 #riwayat h3 {
   margin-bottom: 10px;
   color: #0288d1;
+  font-weight: bold;
 }
 
 #riwayat ul {
