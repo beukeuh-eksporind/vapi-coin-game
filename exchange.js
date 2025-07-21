@@ -1,107 +1,56 @@
-const Game = {
-  cooldown: false,
-  tapHarian: 0,
-  delayTap: 500, // milidetik
+const Exchange = {
+  // Menampilkan form penarikan
+  tampilkanFormTukar() {
+    const idr = Wallet.ambilIDR();
+    const batasMinimal = 1000;
 
-  interaksiVideo(event) {
-    if (this.cooldown) return;
-    this.cooldown = true;
-
-    // Tambahkan reward
-    const tambahCoin = 5;
-    const tambahXP = 3;
-    const tambahIDR = 2;
-
-    Wallet.tambahCoin(tambahCoin);
-    Wallet.tambahXP(tambahXP);
-    Wallet.tambahIDR(tambahIDR);
-
-    this.tambahTapHarian();
-
-    this.animasiKoin(event.clientX, event.clientY);
-    this.mainkanSuara();
-    this.cekLevelNaik();
-
-    setTimeout(() => {
-      this.cooldown = false;
-    }, this.delayTap);
-  },
-
-  tambahTapHarian() {
-    const hariIni = new Date().toLocaleDateString("id-ID");
-    const data = JSON.parse(localStorage.getItem("misiHarian") || "{}");
-
-    if (data.tanggal !== hariIni) {
-      // Reset jika hari berbeda
-      data.tanggal = hariIni;
-      data.tapHariIni = 1;
-      data.selesai = false;
-    } else {
-      data.tapHariIni = (data.tapHariIni || 0) + 1;
+    if (idr < batasMinimal) {
+      alert(`Minimal penarikan adalah Rp ${batasMinimal.toLocaleString()}`);
+      return;
     }
 
-    if (data.tapHariIni >= 10 && !data.selesai) {
-      Wallet.tambahCoin(50); // Bonus misi
-      this.popupBonus("+50 KOIN dari Misi Harian! 🎉");
-      data.selesai = true;
+    const nama = localStorage.getItem("user") || "";
+    const metode = prompt("Masukkan metode penarikan (DANA / GoPay / BCA dll):", "DANA");
+    const namaRek = prompt("Nama penerima / nama rekening:");
+    const noRek = prompt("Nomor akun / rekening:");
+
+    if (!metode || !namaRek || !noRek) {
+      alert("Semua data harus diisi!");
+      return;
     }
 
-    localStorage.setItem("misiHarian", JSON.stringify(data));
+    // Kirim ke Google Sheets
+    Exchange.kirimPenarikan({ nama, metode, namaRek, noRek });
   },
 
-  popupBonus(teks) {
-    const el = document.getElementById("bonus-popup");
-    el.innerText = teks;
-    el.classList.add("show");
-    setTimeout(() => el.classList.remove("show"), 2000);
-  },
-
-  animasiKoin(x, y) {
-    const el = document.createElement("div");
-    el.className = "coin";
-    el.style.left = x + "px";
-    el.style.top = y + "px";
-    el.textContent = "+5 🪙";
-    document.getElementById("coin-animation-wrapper").appendChild(el);
-    setTimeout(() => el.remove(), 1000);
-  },
-
-  mainkanSuara() {
-    document.getElementById("coin-sound")?.play();
-    document.getElementById("laugh-sound")?.play();
-  },
-
-  cekLevelNaik() {
+  kirimPenarikan({ nama, metode, namaRek, noRek }) {
+    const coins = Wallet.ambilKoin();
     const xp = Wallet.ambilXP();
     const level = Wallet.ambilLevel();
-    const batas = level * 50;
+    const idr = Wallet.ambilIDR();
 
-    if (xp >= batas) {
-      Wallet.tambahLevel(1);
-      Wallet.setXP(xp - batas);
-      this.popupBonus(`Naik ke Lv.${level + 1} 🚀`);
-    }
+    const data = {
+      nama, coins, xp, level, idr,
+      metode, namaRek, noRek
+    };
 
-    // Update XP bar
-    const xpBar = document.getElementById("xp-bar");
-    const persent = Math.min((xp / (level * 50)) * 100, 100);
-    xpBar.style.width = persent + "%";
-  },
-
-  putarDadu() {
-    const hasil = Math.floor(Math.random() * 6) + 1;
-    const bonus = hasil * 2;
-
-    Wallet.tambahCoin(bonus);
-    Wallet.tambahXP(bonus);
-    Wallet.tambahIDR(bonus);
-
-    this.popupBonus(`🎲 Dadu: ${hasil} ➜ +${bonus} semua`);
-    this.mainkanSuara();
-    this.cekLevelNaik();
-  },
-
-  bagiKoin() {
-    alert("Bagikan fitur belum tersedia. Nantikan update selanjutnya ya! 🙌");
+    fetch("https://script.google.com/macros/s/AKfycbzThBQMzMqIt1vLeZntGjyq1_E8S9fiQrl2dkSILZDlHkydvyDoztR5L4h9WZMMrGNN/exec", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    })
+    .then(res => res.text())
+    .then(res => {
+      if (res === "OK") {
+        alert("✅ Penarikan berhasil diajukan!\nTunggu beberapa menit.");
+        Wallet.resetIDR(); // reset saldo
+      } else {
+        alert("❌ Gagal mengirim data. Coba lagi.");
+      }
+    })
+    .catch(err => {
+      console.error("Gagal:", err);
+      alert("❌ Terjadi kesalahan saat kirim data.");
+    });
   }
 };
