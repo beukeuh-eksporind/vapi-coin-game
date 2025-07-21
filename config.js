@@ -1,16 +1,24 @@
-const Config = {
-  rateTukar: 0.05, // 1 koin = Rp0,05
-  minimalPenarikan: 10000, // Minimal penarikan Rp10.000
+// ====== CONFIG GLOBAL VAPICOIN ======
 
-  getInfoPenarikan: function () {
-    return `⚠️ Minimal penarikan adalah Rp${this.minimalPenarikan.toLocaleString('id-ID')}. Kumpulkan lebih banyak koin!`;
-  },
+const CONFIG = {
+  GAS_URL: "https://script.google.com/macros/s/AKfycbzThBQMzMqIt1vLeZntGjyq1_E8S9fiQrl2dkSILZDlHkydvyDoztR5L4h9WZMMrGNN/exec",
 
-  // 🔁 Dinamis: rate tukar naik seiring level
-  getRateTukarDinamis: function () {
-    const level = parseInt(localStorage.getItem("level") || "1");
-    if (level >= 10) return 0.07;
-    if (level >= 5) return 0.06;
-    return this.rateTukar;
+  XP_PER_TAP: 10,
+  COIN_PER_TAP: 20,
+  IDR_PER_TAP: 5, // setiap klik dapat 5 IDR
+
+  IDR_MIN_TARIK: 1000,
+
+  BONUS_HARIAN: 50,
+  BONUS_HARUS_TUNAIKAN: 200,
+
+  STORAGE_KEYS: {
+    user: "user",
+    coins: "coins",
+    xp: "xp",
+    level: "level",
+    idr: "idr",
+    lastBonus: "lastBonus",
+    loginTime: "loginTime"
   }
 };
