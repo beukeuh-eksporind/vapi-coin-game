@@ -1,104 +1,37 @@
-const Wallet = {
-  data: {
-    coins: 0,
-    xp: 0,
-    idr: 0,
-    level: 1
-  },
-
-  simpan() {
-    localStorage.setItem("wallet", JSON.stringify(this.data));
-    this.updateTampilan();
-  },
-
-  muat() {
-    const tersimpan = JSON.parse(localStorage.getItem("wallet"));
-    if (tersimpan) {
-      this.data = tersimpan;
+const Auth = {
+  // Mengecek apakah user sudah login
+  cekLoginOtomatis() {
+    const nama = localStorage.getItem(CONFIG.STORAGE_KEYS.user);
+    if (nama) {
+      Auth.tampilkanNama(nama);
+      Wallet.refreshSemua(); // load data coin, xp, idr
+      document.getElementById("login-form").style.display = "none";
+    } else {
+      document.getElementById("login-form").style.display = "flex";
     }
-    this.updateTampilan();
   },
 
-  reset() {
-    this.data = { coins: 0, xp: 0, idr: 0, level: 1 };
-    this.simpan();
-  },
-
-  // ======== Coin ========
-  tambahCoin(jumlah) {
-    this.data.coins += jumlah;
-    this.simpan();
-  },
-
-  ambilKoin() {
-    return this.data.coins;
-  },
-
-  kurangiCoin(jumlah) {
-    this.data.coins = Math.max(0, this.data.coins - jumlah);
-    this.simpan();
-  },
-
-  // ======== XP ========
-  tambahXP(jumlah) {
-    this.data.xp += jumlah;
-    this.simpan();
-  },
-
-  setXP(nilai) {
-    this.data.xp = nilai;
-    this.simpan();
-  },
-
-  ambilXP() {
-    return this.data.xp;
-  },
-
-  // ======== IDR ========
-  tambahIDR(jumlah) {
-    this.data.idr += jumlah;
-    this.simpan();
-  },
-
-  ambilIDR() {
-    return this.data.idr;
-  },
-
-  resetIDR() {
-    this.data.idr = 0;
-    this.simpan();
-  },
-
-  // ======== Level ========
-  ambilLevel() {
-    return this.data.level;
-  },
-
-  tambahLevel(jumlah) {
-    this.data.level += jumlah;
-    this.simpan();
-  },
-
-  setLevel(nilai) {
-    this.data.level = nilai;
-    this.simpan();
-  },
-
-  // ======== UI Update ========
-  updateTampilan() {
-    document.getElementById("coins").textContent = this.data.coins;
-    document.getElementById("xp").textContent = this.data.xp;
-    document.getElementById("idr").textContent = this.data.idr;
-    document.getElementById("level").textContent = this.data.level;
-
-    const xpBar = document.getElementById("xp-bar");
-    if (xpBar) {
-      const persen = Math.min((this.data.xp / (this.data.level * 50)) * 100, 100);
-      xpBar.style.width = persen + "%";
+  // Menyimpan nama user ke localStorage
+  login(nama) {
+    if (!nama || nama.length < 3) {
+      alert("Nama minimal 3 huruf ya.");
+      return;
     }
+
+    localStorage.setItem(CONFIG.STORAGE_KEYS.user, nama);
+    Auth.tampilkanNama(nama);
+    Wallet.resetJikaBaruLogin(); // optional: reset data jika login baru
+    document.getElementById("login-form").style.display = "none";
+  },
+
+  // Menampilkan nama user di UI
+  tampilkanNama(nama) {
+    document.getElementById("user-name").textContent = nama;
   }
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-  Wallet.muat();
+// Event listener tombol login
+document.getElementById("submit-name").addEventListener("click", () => {
+  const nama = document.getElementById("input-name").value.trim();
+  Auth.login(nama);
 });
