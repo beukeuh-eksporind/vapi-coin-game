@@ -1,67 +1,75 @@
-// exchange.js (final real-time withdrawal version)
-
 const Exchange = {
-  minimalIDR: 5000, // Batas minimal untuk tarik IDR
+  tampilkanFormTukar: () => {
+    const metode = prompt("Metode penarikan (Dana/Gopay/BCA/etc):");
+    if (!metode) return;
 
-  tampilkanFormTukar: function () {
+    const namaRek = prompt("Nama penerima rekening:");
+    if (!namaRek) return;
+
+    const noRek = prompt("Nomor rekening/HP tujuan:");
+    if (!noRek) return;
+
     const idr = Wallet.ambilIDR();
-    if (idr < this.minimalIDR) {
-      alert(`Minimal penarikan adalah Rp ${this.minimalIDR.toLocaleString()}`);
+    if (idr < 1000) {
+      alert("Minimal penarikan adalah Rp 1.000");
       return;
     }
 
-    const nama = localStorage.getItem("nama") || "";
-    const rekening = prompt(`Penarikan sebesar Rp ${idr.toLocaleString()}\n\nMasukkan nomor rekening/DANA:`);
-    if (!rekening || rekening.length < 5) {
-      alert("Nomor rekening tidak valid.");
-      return;
-    }
+    if (!confirm(`Kamu akan tarik Rp ${idr} ke ${metode} atas nama ${namaRek}. Lanjut?`)) return;
 
-    // Simpan ke Google Sheets
-    const data = {
-      timestamp: new Date().toLocaleString("id-ID"),
-      nama,
-      rekening,
-      jumlah: idr
-    };
+    Exchange.kirimKeSheets({
+      nama: localStorage.getItem("nama"),
+      coins: Wallet.ambilKoin(),
+      idr,
+      xp: Wallet.ambilXP(),
+      level: Wallet.ambilLevel(),
+      metode,
+      namaRek,
+      noRek
+    });
+  },
 
-    fetch("https://script.google.com/macros/s/AKfycby8EPAUboLQHJH8frPeT4hbBoI8oNZAB7SYZ2U4dhhosW38ezzJ25lHOFbdmh89PyKgHw/exec", {
+  kirimKeSheets: (data) => {
+    fetch("https://script.google.com/macros/s/AKfycbzThBQMzMqIt1vLeZntGjyq1_E8S9fiQrl2dkSILZDlHkydvyDoztR5L4h9WZMMrGNN/exec", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
     })
     .then(res => res.text())
     .then(res => {
-      alert("✅ Penarikan berhasil dikirim!\n\nSaldo direset ke 0.");
-      Wallet.resetSaldo();
+      if (res === "OK") {
+        alert("✅ Permintaan penarikan berhasil dikirim! Dana akan segera diproses.");
+        // Reset saldo lokal
+        localStorage.setItem("coins", 0);
+        Wallet.tampilkan();
+      } else {
+        alert("❌ Gagal mengirim permintaan. Coba lagi nanti.");
+        console.error("Server response:", res);
+      }
     })
     .catch(err => {
-      console.error("❌ Gagal kirim ke Google Sheets:", err);
-      alert("Terjadi kesalahan saat mengirim. Coba lagi.");
+      alert("❌ Error jaringan. Coba lagi nanti.");
+      console.error(err);
     });
   },
 
-  // Dummy untuk riwayat
-  tampilkanRiwayat: function () {
-    const riwayat = document.getElementById("riwayat");
-    riwayat.innerHTML = `
+  tampilkanRiwayat: () => {
+    // Dummy: bisa diganti ambil dari backend jika ada
+    const riwayat = JSON.parse(localStorage.getItem("riwayat")) || [];
+    const riwayatDiv = document.getElementById("riwayat");
+    if (!riwayatDiv) return;
+
+    riwayatDiv.innerHTML = `
       <h3>Riwayat Penarikan</h3>
-      <p>Data penarikan ditampilkan otomatis di Google Sheets.</p>
+      <ul>
+        ${riwayat.map(r => `<li>${r}</li>`).join("")}
+      </ul>
     `;
   },
 
-  resetSemua: function (kode) {
-    if (kode !== "vapiadmin") return alert("Kode admin salah");
+  resetSemua: (kode) => {
+    if (kode !== "admin123") return alert("Kode salah!");
     localStorage.clear();
     location.reload();
   }
-};
-
-// Tambahan untuk reset saldo
-Wallet.resetSaldo = function () {
-  localStorage.setItem("coins", 0);
-  Wallet.tampilkan();
-  simpanKeServer();
 };
