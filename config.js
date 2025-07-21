@@ -1,4 +1,1 @@
-const CONFIG = {
-  SERVER_URL: "http://localhost:3000", // ganti ke IP LAN / VPS jika dibutuhkan
-  MIN_PENARIKAN_IDR: 1000
-};
+endpointPenarikan: "https://script.google.com/macros/s/AKfycbzThBQMzMqIt1vLeZntGjyq1_E8S9fiQrl2dkSILZDlHkydvyDoztR5L4h9WZMMrGNN/exec"
