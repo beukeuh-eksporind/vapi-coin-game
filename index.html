@@ -14,7 +14,7 @@
     <div class="top-col">👤 <span id="user-name">...</span></div>
     <div class="top-col">
       IDR: <span id="idr">0</span><br />
-      <button id="cairkan-btn" onclick="Exchange.tampilkanFormTukar()">Tarik Uang Otomatis 💸</button>
+      <button id="cairkan-btn">Tarik Uang Otomatis 💸</button>
     </div>
     <div class="top-col">XP: <span id="xp">0</span></div>
     <div class="top-col">COIN: <span id="coins">0</span></div>
@@ -37,37 +37,35 @@
     </div>
   </div>
 
-  <!-- ========== VIDEO BAYI & TAP HINT ========== -->
+  <!-- ========== VIDEO & TAP ========== -->
   <div id="character-wrapper">
-    <video id="baby-video" autoplay loop muted playsinline onclick="Game.interaksiVideo(event)">
+    <video id="baby-video" autoplay loop muted playsinline>
       <source src="videos/baby-dance.webm" type="video/webm" />
       Video tidak didukung.
     </video>
     <img id="tap-hand" src="images/tap-hand.png" alt="Tap" />
   </div>
 
-  <!-- ========== TOMBOL AKSI ========== -->
+  <!-- ========== AKSI ========== -->
   <div class="actions">
-    <button onclick="Game.putarDadu()">Putar Dadu 🎲</button>
-    <button onclick="Game.bagiKoin()">Bagikan 🔄</button>
+    <button id="btn-dadu">Putar Dadu 🎲</button>
+    <button id="btn-bagi">Bagikan 🔄</button>
   </div>
 
-  <!-- ========== RIWAYAT PENARIKAN ========== -->
+  <!-- ========== RIWAYAT ========== -->
   <div id="riwayat-user" class="riwayat-box">
     <h3>Riwayat Pemain</h3>
     <ul id="riwayat-user-list"></ul>
   </div>
 
-  <!-- ========== BONUS ANIMASI ========== -->
+  <!-- ========== BONUS / SUARA / MODAL ========== -->
   <div id="coin-animation-wrapper"></div>
   <div id="bonus-coins-container"></div>
   <div id="bonus-popup" class="bonus-popup">+50 KOIN! 🎁</div>
 
-  <!-- ========== SUARA ========== -->
   <audio id="coin-sound" src="sounds/coin.wav" preload="auto"></audio>
   <audio id="laugh-sound" src="sounds/baby-laugh.wav" preload="auto"></audio>
 
-  <!-- ========== MODAL IKLAN ========== -->
   <div id="ads-modal" class="modal">
     <div class="modal-content">
       <p>🎥 Tonton iklan ini sebelum tarik uang</p>
@@ -75,13 +73,12 @@
     </div>
   </div>
 
-  <!-- ========== ADMIN TOOLS ========== -->
   <div id="admin-tools" style="display:none; text-align:center; margin:20px;">
     <input type="password" id="admin-kode" placeholder="Kode admin" />
     <button onclick="Exchange.resetSemua(document.getElementById('admin-kode').value)">🔁 Reset Semua</button>
   </div>
 
-  <!-- ========== SCRIPT ========== -->
+  <!-- ========== SCRIPTS (URUTAN PENTING) ========== -->
   <script src="config.js"></script>
   <script src="wallet.js"></script>
   <script src="exchange.js"></script>
@@ -89,15 +86,23 @@
   <script src="auth.js"></script>
   <script src="bonus-harian.js"></script>
 
+  <!-- ========== INISIALISASI ========== -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      Exchange.tampilkanRiwayat();
-      BonusHarian.cekDanKlaim();
-      Auth.cekLoginOtomatis();
+      Exchange.tampilkanRiwayat?.();
+      BonusHarian.cekDanKlaim?.();
+      Auth.cekLoginOtomatis?.();
       tampilkanRiwayatUser();
+
+      // Klik video untuk interaksi
+      document.getElementById("baby-video")?.addEventListener("click", Game.interaksiVideo);
+
+      // Tombol-tombol
+      document.getElementById("btn-dadu")?.addEventListener("click", Game.putarDadu);
+      document.getElementById("btn-bagi")?.addEventListener("click", Game.bagiKoin);
+      document.getElementById("cairkan-btn")?.addEventListener("click", Exchange.tampilkanFormTukar);
     });
 
-    // Riwayat pemain
     function tampilkanRiwayatUser() {
       fetch('/api/users')
         .then(res => res.json())
@@ -110,12 +115,10 @@
             list.appendChild(li);
           });
         })
-        .catch(() => {
-          console.warn("Riwayat user tidak tersedia.");
-        });
+        .catch(() => console.warn("Riwayat user tidak tersedia."));
     }
 
-    // Shortcut buka admin tools
+    // Shortcut admin: Ctrl+R lalu A
     document.addEventListener("keydown", (e) => {
       if (e.ctrlKey && e.key.toLowerCase() === "r") {
         document.addEventListener("keydown", (e2) => {
@@ -126,25 +129,8 @@
       }
     });
 
-    // Hindari fokus video lompat
-    document.getElementById('baby-video')?.addEventListener('mousedown', e => {
-      e.preventDefault();
-    });
-  </script>
-  <script>
-  try {
-    console.log("Script Loaded");
-    console.log("Exchange:", typeof Exchange);
-    console.log("Game:", typeof Game);
-    console.log("Wallet:", typeof Wallet);
-
-    // Tes klik fungsinya
-    document.addEventListener("click", () => {
-      alert("✅ Klik terdeteksi");
-    });
-  } catch (e) {
-    alert("❌ Error JS: " + e.message);
-  }
+    // Cegah fokus video
+    document.getElementById('baby-video')?.addEventListener('mousedown', e => e.preventDefault());
   </script>
 </body>
 </html>
