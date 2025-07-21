@@ -1,30 +1,27 @@
-const Auth = {
-  mulai: function () {
-    const namaTersimpan = localStorage.getItem("namaPengguna");
+// auth.js
 
-    if (namaTersimpan) {
-      this.loginSukses(namaTersimpan);
+const Auth = {
+  cekLoginOtomatis() {
+    const nama = localStorage.getItem("nama");
+    if (nama) {
+      document.getElementById("login-form").style.display = "none";
+      document.getElementById("user-name").textContent = nama;
+      Wallet.loadDariBackend(nama); // Ambil data dari server
     } else {
-      document.getElementById("login-form").style.display = "flex";
-      document.getElementById("submit-name").addEventListener("click", () => {
-        const namaInput = document.getElementById("input-name").value.trim();
-        if (namaInput.length < 3) {
-          alert("Nama terlalu pendek.");
-          return;
-        }
-        localStorage.setItem("namaPengguna", namaInput);
-        this.loginSukses(namaInput);
-      });
+      document.getElementById("login-form").style.display = "block";
     }
   },
 
-  loginSukses: function (nama) {
-    document.getElementById("user-name").innerText = nama;
+  loginManual() {
+    const nama = document.getElementById("input-name").value.trim();
+    if (!nama) return alert("Masukkan nama dulu");
+
+    localStorage.setItem("nama", nama);
+    document.getElementById("user-name").textContent = nama;
     document.getElementById("login-form").style.display = "none";
+    Wallet.loadDariBackend(nama); // Ambil data dari server
   }
 };
 
-// Jalankan saat halaman selesai dimuat
-document.addEventListener("DOMContentLoaded", () => {
-  Auth.mulai();
-});
+// Event listener untuk tombol login
+document.getElementById("submit-name").addEventListener("click", Auth.loginManual);
