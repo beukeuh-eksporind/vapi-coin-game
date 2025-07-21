@@ -1,3 +1,4 @@
+<!-- index.html FINAL dengan integrasi misi harian -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -8,7 +9,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- ========== TOP BAR ========== -->
+  <!-- ========== TOP INFO BAR ========== -->
   <div class="top-bar">
     <div class="top-col">👤 <span id="user-name">...</span></div>
     <div class="top-col">
@@ -19,13 +20,13 @@
     <div class="top-col">COIN: <span id="coins">0</span></div>
   </div>
 
-  <!-- ========== FORM LOGIN ========== -->
-  <div id="login-form" style="display: none;">
-    <input type="text" id="input-name" placeholder="Masukkan Nama Anda" />
+  <!-- ========== LOGIN TAMU ========== -->
+  <div id="login-form" style="display:none;">
+    <input type="text" id="input-name" placeholder="Masukkan Nama Anda">
     <button id="submit-name">Mulai</button>
   </div>
 
-  <!-- ========== LOGO + XP ========== -->
+  <!-- ========== LOGO & XP BAR ========== -->
   <div class="logo">
     <h1>VapiCoin</h1>
     <div class="xp-header">
@@ -36,18 +37,13 @@
     </div>
   </div>
 
-  <!-- ========== VIDEO BAYI & TAP HINT ========== -->
+  <!-- ========== VIDEO BAYI ========== -->
   <div id="character-wrapper">
-    <video id="baby-video" autoplay loop muted playsinline onclick="Game.interaksiVideo(event)">
-      <source src="videos/baby-dance.webm" type="video/webm" />
+    <video id="baby-video" autoplay loop muted onclick="Game.interaksiVideo(event)">
+      <source src="videos/baby-dance.webm" type="video/webm">
       Video tidak didukung.
     </video>
     <img id="tap-hand" src="images/tap-hand.png" alt="Tap hint" />
-  </div>
-
-  <!-- ========== IKLAN (Dummy) ========== -->
-  <div id="ads-container">
-    <p>[Iklan tampil di sini - pasang SDK]</p>
   </div>
 
   <!-- ========== TOMBOL AKSI ========== -->
@@ -56,16 +52,19 @@
     <button onclick="Game.bagiKoin()">Bagikan 🔄</button>
   </div>
 
+  <!-- ========== MISI HARIAN ========== -->
+  <div id="misi-harian" style="text-align:center; margin-top:10px;"></div>
+
   <!-- ========== RIWAYAT PENARIKAN ========== -->
   <div id="riwayat"></div>
 
-  <!-- ========== RIWAYAT USER DARI BACKEND ========== -->
+  <!-- ========== RIWAYAT USER (otomatis dari backend) ========== -->
   <div id="riwayat-user" class="riwayat-box">
     <h3>Riwayat Pemain</h3>
     <ul id="riwayat-user-list"></ul>
   </div>
 
-  <!-- ========== BONUS & KOIN ANIMASI ========== -->
+  <!-- ========== ANIMASI BONUS & KOIN ========== -->
   <div id="coin-animation-wrapper"></div>
   <div id="bonus-coins-container"></div>
   <div id="bonus-popup" class="bonus-popup">+50 KOIN! 🎁</div>
@@ -95,16 +94,18 @@
   <script src="game.js"></script>
   <script src="auth.js"></script>
   <script src="bonus-harian.js"></script>
+  <script src="misi-harian.js"></script>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       Exchange.tampilkanRiwayat();
       BonusHarian.cekDanKlaim();
       Auth.cekLoginOtomatis();
+      MisiHarian.init();
+      MisiHarian.tampilkanStatus();
       tampilkanRiwayatUser();
     });
 
-    // Ctrl+R lalu A => buka admin tools
     document.addEventListener("keydown", (e) => {
       if (e.ctrlKey && e.key.toLowerCase() === "r") {
         document.addEventListener("keydown", (e2) => {
@@ -115,7 +116,6 @@
       }
     });
 
-    // Tampilkan riwayat user dari backend
     function tampilkanRiwayatUser() {
       fetch('/api/users')
         .then(res => res.json())
@@ -130,11 +130,6 @@
         })
         .catch(err => console.error('Gagal ambil riwayat:', err));
     }
-
-    // Cegah scroll/klik default yang bikin layar loncat
-    document.querySelectorAll("button, input").forEach(el => {
-      el.addEventListener("touchstart", e => e.preventDefault(), { passive: false });
-    });
   </script>
 </body>
 </html>
