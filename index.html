@@ -6,6 +6,23 @@
   <title>VapiCoin</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Tambahan fix agar tidak lompat di desktop */
+    html, body {
+      scroll-behavior: smooth;
+      overscroll-behavior: none;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    #baby-video {
+      outline: none;
+      border: none;
+      user-select: none;
+      -webkit-user-drag: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+  </style>
 </head>
 <body>
   <!-- ========== TOP BAR ========== -->
@@ -38,7 +55,7 @@
 
   <!-- ========== VIDEO BAYI & TAP HINT ========== -->
   <div id="character-wrapper">
-    <video id="baby-video" autoplay loop muted onclick="Game.interaksiVideo(event)" playsinline>
+    <video id="baby-video" autoplay loop muted playsinline onclick="Game.interaksiVideo(event)">
       <source src="videos/baby-dance.webm" type="video/webm" />
       Video tidak didukung.
     </video>
@@ -125,6 +142,11 @@
         })
         .catch(err => console.error('Gagal ambil riwayat:', err));
     }
+
+    // Cegah video fokus agar halaman tidak loncat
+    document.getElementById('baby-video')?.addEventListener('mousedown', e => {
+      e.preventDefault();
+    });
   </script>
 </body>
 </html>
