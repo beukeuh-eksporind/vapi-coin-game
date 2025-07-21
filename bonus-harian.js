@@ -18,7 +18,20 @@ const BonusHarian = {
     // Simpan tanggal klaim
     localStorage.setItem('lastBonus', hariIni);
 
-    // Tampilkan popup
+    // ✅ Kirim juga ke backend
+    fetch('/api/user', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        nama,
+        coins: Wallet.ambilKoin(),
+        xp: Wallet.ambilXP(),
+        level: Wallet.ambilLevel(),
+        bonusHarian: hariIni // ini opsional, bisa digunakan buat log
+      })
+    });
+
+    // Tampilkan popup bonus
     BonusHarian.tampilkanPopup(`+${bonusKoin} KOIN Harian! ☀️`);
   },
 
