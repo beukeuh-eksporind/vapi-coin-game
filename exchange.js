@@ -1,28 +1,29 @@
 const Exchange = {
+  // Menampilkan form penarikan
   tampilkanFormTukar() {
-    console.log("Form penarikan dipanggil");
-
     const idr = Wallet.ambilIDR();
     const batasMinimal = 1000;
 
     if (idr < batasMinimal) {
-      alert(`Minimal penarikan adalah Rp ${batasMinimal.toLocaleString()}`);
+      alert(`💰 Minimal penarikan adalah Rp ${batasMinimal.toLocaleString()}`);
       return;
     }
 
     const nama = localStorage.getItem("user") || "";
-    const metode = prompt("Masukkan metode penarikan (DANA / GoPay / BCA dll):", "DANA");
-    const namaRek = prompt("Nama penerima / nama rekening:");
+    const metode = prompt("Metode penarikan (DANA / GoPay / BCA dll):", "DANA");
+    const namaRek = prompt("Nama penerima / rekening:");
     const noRek = prompt("Nomor akun / rekening:");
 
     if (!metode || !namaRek || !noRek) {
-      alert("Semua data harus diisi!");
+      alert("❌ Semua data harus diisi!");
       return;
     }
 
+    // Kirim ke server lokal
     Exchange.kirimPenarikan({ nama, metode, namaRek, noRek });
   },
 
+  // Kirim data penarikan ke backend
   kirimPenarikan({ nama, metode, namaRek, noRek }) {
     const coins = Wallet.ambilKoin();
     const xp = Wallet.ambilXP();
@@ -30,30 +31,67 @@ const Exchange = {
     const idr = Wallet.ambilIDR();
 
     const data = {
-      nama, coins, xp, level, idr,
-      metode, namaRek, noRek
+      nama,
+      coins,
+      xp,
+      level,
+      idr,
+      metode,
+      namaRek,
+      noRek,
+      status: "Belum Dibayar",
+      waktu: new Date().toISOString()
     };
 
-    fetch("https://script.google.com/macros/s/AKfycbzThBQMzMqIt1vLeZntGjyq1_E8S9fiQrl2dkSILZDlHkydvyDoztR5L4h9WZMMrGNN/exec", {
+    fetch("http://localhost:3000/api/users", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
     })
-    .then(res => res.text())
-    .then(res => {
-      if (res === "OK") {
-        alert("✅ Penarikan berhasil diajukan!\nTunggu beberapa menit.");
-        Wallet.resetIDR();
-      } else {
+      .then(res => {
+        if (res.ok) {
+          alert("✅ Penarikan berhasil diajukan!");
+          Wallet.resetIDR();
+        } else {
+          throw new Error("Gagal mengirim ke server.");
+        }
+      })
+      .catch(err => {
+        console.error("❌ Gagal kirim:", err);
         alert("❌ Gagal mengirim data. Coba lagi.");
-      }
-    })
-    .catch(err => {
-      console.error("Gagal:", err);
-      alert("❌ Terjadi kesalahan saat kirim data.");
-    });
+      });
+  },
+
+  // Menampilkan daftar penarikan dari server lokal
+  tampilkanRiwayat() {
+    fetch("http://localhost:3000/api/users")
+      .then(res => res.json())
+      .then(users => {
+        const el = document.getElementById("riwayat");
+        el.innerHTML = "<h3>Riwayat Penarikan</h3><ul>" +
+          users.slice().reverse().map(u =>
+            `<li>${u.nama} • Rp ${u.idr.toLocaleString()} • ${u.metode}</li>`
+          ).join("") +
+          "</ul>";
+      })
+      .catch(err => {
+        console.warn("⚠️ Gagal ambil riwayat:", err);
+      });
+  },
+
+  // Admin reset semua data (opsional)
+  resetSemua(kode) {
+    if (kode === "admin123") {
+      localStorage.clear();
+      location.reload();
+    } else {
+      alert("❌ Kode salah");
+    }
+  },
+
+  // Simulasi selesai nonton iklan
+  iklanSelesai() {
+    document.getElementById("ads-modal").style.display = "none";
+    Exchange.tampilkanFormTukar();
   }
 };
-
-// Pastikan global
-window.Exchange = Exchange;
