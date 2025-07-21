@@ -1,98 +1,107 @@
-const Exchange = {
-  minimalPenarikan: 1000, // Minimal IDR agar bisa tarik
+const Game = {
+  cooldown: false,
+  tapHarian: 0,
+  delayTap: 500, // milidetik
 
-  tampilkanFormTukar() {
-    const idr = Wallet.ambilIDR();
-    const nama = Wallet.ambilNama();
+  interaksiVideo(event) {
+    if (this.cooldown) return;
+    this.cooldown = true;
 
-    if (idr < this.minimalPenarikan) {
-      alert(`Minimal penarikan adalah Rp ${this.minimalPenarikan.toLocaleString()}`);
-      return;
+    // Tambahkan reward
+    const tambahCoin = 5;
+    const tambahXP = 3;
+    const tambahIDR = 2;
+
+    Wallet.tambahCoin(tambahCoin);
+    Wallet.tambahXP(tambahXP);
+    Wallet.tambahIDR(tambahIDR);
+
+    this.tambahTapHarian();
+
+    this.animasiKoin(event.clientX, event.clientY);
+    this.mainkanSuara();
+    this.cekLevelNaik();
+
+    setTimeout(() => {
+      this.cooldown = false;
+    }, this.delayTap);
+  },
+
+  tambahTapHarian() {
+    const hariIni = new Date().toLocaleDateString("id-ID");
+    const data = JSON.parse(localStorage.getItem("misiHarian") || "{}");
+
+    if (data.tanggal !== hariIni) {
+      // Reset jika hari berbeda
+      data.tanggal = hariIni;
+      data.tapHariIni = 1;
+      data.selesai = false;
+    } else {
+      data.tapHariIni = (data.tapHariIni || 0) + 1;
     }
 
-    const metode = prompt("Metode penarikan? (DANA / GoPay / BCA / Lainnya)").trim();
-    if (!metode) return;
-
-    const namaRek = prompt("Nama Pemilik Rekening / Akun?").trim();
-    if (!namaRek) return;
-
-    const noRek = prompt("Nomor Rekening / Nomor DANA/GoPay?").trim();
-    if (!noRek) return;
-
-    const konfirmasi = confirm(`Yakin ingin menarik Rp ${idr.toLocaleString()} ke ${metode}?`);
-    if (!konfirmasi) return;
-
-    // Tampilkan modal iklan dulu (kalau kamu pakai SDK iklan, bisa ganti)
-    document.getElementById("ads-modal").style.display = "flex";
-
-    // Diselesaikan lewat tombol "Saya sudah menonton"
-    this._dataPenarikan = { nama, coins: Wallet.ambilKoin(), idr, xp: Wallet.ambilXP(), level: Wallet.ambilLevel(), metode, namaRek, noRek };
-  },
-
-  iklanSelesai() {
-    document.getElementById("ads-modal").style.display = "none";
-
-    const data = this._dataPenarikan;
-    if (!data) return alert("Data tidak ditemukan.");
-
-    fetch(CONFIG.urlGoogleAppsScript, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    })
-    .then((res) => res.text())
-    .then((text) => {
-      if (text === "OK") {
-        alert("✅ Penarikan berhasil dikirim!\nSaldo akan masuk setelah dicek otomatis.");
-        Wallet.resetSaldo();
-        this.tampilkanRiwayat();
-      } else {
-        alert("❌ Gagal mengirim data. Coba lagi.");
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      alert("❌ Error saat mengirim data.");
-    });
-  },
-
-  tampilkanRiwayat() {
-    const data = JSON.parse(localStorage.getItem("riwayatPenarikan") || "[]");
-    const container = document.getElementById("riwayat");
-    if (!container) return;
-
-    if (data.length === 0) {
-      container.innerHTML = "<p>Belum ada riwayat penarikan.</p>";
-      return;
+    if (data.tapHariIni >= 10 && !data.selesai) {
+      Wallet.tambahCoin(50); // Bonus misi
+      this.popupBonus("+50 KOIN dari Misi Harian! 🎉");
+      data.selesai = true;
     }
 
-    container.innerHTML = `
-      <h3>Riwayat Penarikan Anda</h3>
-      <ul>
-        ${data.slice().reverse().map(item => `
-          <li>
-            ${item.tanggal} • ${item.metode} • Rp ${item.idr.toLocaleString()} ➜ ${item.status || 'Pending'}
-          </li>
-        `).join("")}
-      </ul>
-    `;
+    localStorage.setItem("misiHarian", JSON.stringify(data));
   },
 
-  simpanRiwayatBaru(entry) {
-    const list = JSON.parse(localStorage.getItem("riwayatPenarikan") || "[]");
-    entry.tanggal = new Date().toLocaleString("id-ID");
-    entry.status = "Pending";
-    list.push(entry);
-    localStorage.setItem("riwayatPenarikan", JSON.stringify(list));
+  popupBonus(teks) {
+    const el = document.getElementById("bonus-popup");
+    el.innerText = teks;
+    el.classList.add("show");
+    setTimeout(() => el.classList.remove("show"), 2000);
   },
 
-  resetSemua(kode) {
-    if (kode !== CONFIG.kodeAdmin) {
-      alert("Kode admin salah!");
-      return;
+  animasiKoin(x, y) {
+    const el = document.createElement("div");
+    el.className = "coin";
+    el.style.left = x + "px";
+    el.style.top = y + "px";
+    el.textContent = "+5 🪙";
+    document.getElementById("coin-animation-wrapper").appendChild(el);
+    setTimeout(() => el.remove(), 1000);
+  },
+
+  mainkanSuara() {
+    document.getElementById("coin-sound")?.play();
+    document.getElementById("laugh-sound")?.play();
+  },
+
+  cekLevelNaik() {
+    const xp = Wallet.ambilXP();
+    const level = Wallet.ambilLevel();
+    const batas = level * 50;
+
+    if (xp >= batas) {
+      Wallet.tambahLevel(1);
+      Wallet.setXP(xp - batas);
+      this.popupBonus(`Naik ke Lv.${level + 1} 🚀`);
     }
 
-    localStorage.clear();
-    location.reload();
+    // Update XP bar
+    const xpBar = document.getElementById("xp-bar");
+    const persent = Math.min((xp / (level * 50)) * 100, 100);
+    xpBar.style.width = persent + "%";
+  },
+
+  putarDadu() {
+    const hasil = Math.floor(Math.random() * 6) + 1;
+    const bonus = hasil * 2;
+
+    Wallet.tambahCoin(bonus);
+    Wallet.tambahXP(bonus);
+    Wallet.tambahIDR(bonus);
+
+    this.popupBonus(`🎲 Dadu: ${hasil} ➜ +${bonus} semua`);
+    this.mainkanSuara();
+    this.cekLevelNaik();
+  },
+
+  bagiKoin() {
+    alert("Bagikan fitur belum tersedia. Nantikan update selanjutnya ya! 🙌");
   }
 };
