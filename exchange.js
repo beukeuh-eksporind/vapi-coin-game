@@ -2,7 +2,7 @@ const Exchange = {
   // Menampilkan form penarikan
   tampilkanFormTukar() {
     const idr = Wallet.ambilIDR();
-    const batasMinimal = 1000;
+    const batasMinimal = CONFIG.MIN_PENARIKAN_IDR;
 
     if (idr < batasMinimal) {
       alert(`💰 Minimal penarikan adalah Rp ${batasMinimal.toLocaleString()}`);
@@ -64,7 +64,7 @@ const Exchange = {
 
   // Menampilkan daftar penarikan dari server lokal
   tampilkanRiwayat() {
-    fetch("http://localhost:3000/api/users")
+    fetch(`${CONFIG.SERVER_URL}/api/users`, ...)
       .then(res => res.json())
       .then(users => {
         const el = document.getElementById("riwayat");
