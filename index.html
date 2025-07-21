@@ -19,7 +19,7 @@
     <div class="top-col">COIN: <span id="coins">0</span></div>
   </div>
 
-  <!-- ========== FORM LOGIN (jika belum login) ========== -->
+  <!-- ========== FORM LOGIN ========== -->
   <div id="login-form" style="display: none;">
     <input type="text" id="input-name" placeholder="Masukkan Nama Anda" />
     <button id="submit-name">Mulai</button>
@@ -38,14 +38,14 @@
 
   <!-- ========== VIDEO BAYI & TAP HINT ========== -->
   <div id="character-wrapper">
-    <video id="baby-video" autoplay loop muted onclick="Game.interaksiVideo(event)">
+    <video id="baby-video" autoplay loop muted playsinline onclick="Game.interaksiVideo(event)">
       <source src="videos/baby-dance.webm" type="video/webm" />
       Video tidak didukung.
     </video>
     <img id="tap-hand" src="images/tap-hand.png" alt="Tap hint" />
   </div>
 
-  <!-- ========== IKLAN (dummy) ========== -->
+  <!-- ========== IKLAN (Dummy) ========== -->
   <div id="ads-container">
     <p>[Iklan tampil di sini - pasang SDK]</p>
   </div>
@@ -59,13 +59,13 @@
   <!-- ========== RIWAYAT PENARIKAN ========== -->
   <div id="riwayat"></div>
 
-  <!-- ========== RIWAYAT USER (otomatis dari backend) ========== -->
+  <!-- ========== RIWAYAT USER DARI BACKEND ========== -->
   <div id="riwayat-user" class="riwayat-box">
     <h3>Riwayat Pemain</h3>
     <ul id="riwayat-user-list"></ul>
   </div>
 
-  <!-- ========== ANIMASI BONUS & KOIN ========== -->
+  <!-- ========== BONUS & KOIN ANIMASI ========== -->
   <div id="coin-animation-wrapper"></div>
   <div id="bonus-coins-container"></div>
   <div id="bonus-popup" class="bonus-popup">+50 KOIN! 🎁</div>
@@ -101,7 +101,7 @@
       Exchange.tampilkanRiwayat();
       BonusHarian.cekDanKlaim();
       Auth.cekLoginOtomatis();
-      tampilkanRiwayatUser(); // backend
+      tampilkanRiwayatUser();
     });
 
     // Ctrl+R lalu A => buka admin tools
@@ -115,7 +115,7 @@
       }
     });
 
-    // Fungsi tampilkan riwayat dari backend
+    // Tampilkan riwayat user dari backend
     function tampilkanRiwayatUser() {
       fetch('/api/users')
         .then(res => res.json())
@@ -130,6 +130,11 @@
         })
         .catch(err => console.error('Gagal ambil riwayat:', err));
     }
+
+    // Cegah scroll/klik default yang bikin layar loncat
+    document.querySelectorAll("button, input").forEach(el => {
+      el.addEventListener("touchstart", e => e.preventDefault(), { passive: false });
+    });
   </script>
 </body>
 </html>
