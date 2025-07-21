@@ -1,8 +1,21 @@
-const Config = {
-  rateTukar: 100, // 1 coin = Rp100
-  minimalPenarikan: 50, // Minimal coin yang bisa ditarik
+// ==== KONFIGURASI UTAMA GAME ====
 
-  getInfoPenarikan: function () {
-    return `💡 Minimal penarikan adalah ${this.minimalPenarikan} koin.\n1 koin = Rp${this.rateTukar}`;
-  }
+const CONFIG = {
+  // Nama Game
+  namaGame: "VapiCoin",
+
+  // Versi Aplikasi
+  versi: "1.0.0",
+
+  // URL Google Apps Script untuk pengiriman data penarikan
+  endpointPenarikan: "https://script.google.com/macros/s/PASTE_SCRIPT_URL/exec",
+
+  // Jumlah minimal penarikan dalam IDR
+  minimalPenarikan: 1000,
+
+  // XP maksimal untuk naik level
+  xpPerLevel: 1000,
+
+  // Jumlah coin = IDR (misalnya: 100 coin = Rp100)
+  nilaiKoin: 1
 };
