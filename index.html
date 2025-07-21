@@ -132,10 +132,19 @@
     });
   </script>
   <script>
-  console.log("Game JS Loaded");
-  console.log("Exchange:", typeof Exchange);
-  console.log("Wallet:", typeof Wallet);
-  console.log("Game:", typeof Game);
-</script>
+  try {
+    console.log("Script Loaded");
+    console.log("Exchange:", typeof Exchange);
+    console.log("Game:", typeof Game);
+    console.log("Wallet:", typeof Wallet);
+
+    // Tes klik fungsinya
+    document.addEventListener("click", () => {
+      alert("✅ Klik terdeteksi");
+    });
+  } catch (e) {
+    alert("❌ Error JS: " + e.message);
+  }
+  </script>
 </body>
 </html>
