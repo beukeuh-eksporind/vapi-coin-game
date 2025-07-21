@@ -1,53 +1,47 @@
 const Game = {
-  nilaiPerTap: 1,
-  nilaiXpPerTap: 1,
+  // Interaksi saat video bayi disentuh
+  interaksiVideo: (event) => {
+    // Tambah coin & XP
+    Wallet.tambahKoin(1);
+    Wallet.tambahXP(2);
 
-  interaksiVideo: function (event) {
-    // Hilangkan ikon tunjuk jika ada
-    const icon = document.getElementById("tap-hand-icon");
-    if (icon) icon.remove();
+    // Putar suara bayi
+    const laughSound = document.getElementById("laugh-sound");
+    if (laughSound) {
+      laughSound.currentTime = 0;
+      laughSound.play().catch(() => {});
+    }
 
-    Wallet.tambahKoin(this.nilaiPerTap);
-    Wallet.tambahXp(this.nilaiXpPerTap);
-
-    this.mainkanSuara("coin-sound");
-    this.animasiKoin(event.clientX, event.clientY);
+    // Tampilkan animasi koin
+    Game.tampilkanAnimasiKoin(event.clientX, event.clientY);
   },
 
-  putarDadu: function () {
-    const hasil = Math.floor(Math.random() * 6) + 1;
-    alert("🎲 Kamu mendapatkan angka: " + hasil);
-    const bonus = hasil;
-    Wallet.tambahKoin(bonus);
-    Wallet.tambahXp(bonus);
-  },
+  // Animasi koin dari posisi tap
+  tampilkanAnimasiKoin: (x, y) => {
+    const coin = document.createElement("div");
+    coin.className = "coin";
+    coin.textContent = "💰";
+    coin.style.left = x + "px";
+    coin.style.top = y + "px";
 
-  bagiKoin: function () {
-    const bonus = 3;
-    alert("📣 Terima kasih sudah berbagi! Bonus +3 koin & XP");
-    Wallet.tambahKoin(bonus);
-    Wallet.tambahXp(bonus);
-  },
-
-  animasiKoin: function (x, y) {
     const wrapper = document.getElementById("coin-animation-wrapper");
-    const el = document.createElement("div");
-    el.className = "coin";
-    el.style.left = x + "px";
-    el.style.top = y + "px";
-    el.innerText = "+1 🪙";
-    wrapper.appendChild(el);
+    wrapper.appendChild(coin);
 
     setTimeout(() => {
-      el.remove();
+      coin.remove();
     }, 1000);
   },
 
-  mainkanSuara: function (id) {
-    const audio = document.getElementById(id);
-    if (audio) {
-      audio.currentTime = 0;
-      audio.play();
-    }
+  // Fitur bonus bagikan (dummy)
+  bagiKoin: () => {
+    alert("🎁 Kamu dapat 5 koin dari berbagi!");
+    Wallet.tambahKoin(5);
+  },
+
+  // Fitur putar dadu (dummy)
+  putarDadu: () => {
+    const hasil = Math.floor(Math.random() * 6) + 1;
+    alert(`🎲 Kamu dapat angka ${hasil}!\n+${hasil} koin`);
+    Wallet.tambahKoin(hasil);
   }
 };
