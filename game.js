@@ -1,47 +1,63 @@
 const Game = {
-  // Interaksi saat video bayi disentuh
-  interaksiVideo: (event) => {
-    // Tambah coin & XP
+  interaksiVideo(event) {
+    // Tambah coin, XP, dan IDR saat video diklik
     Wallet.tambahKoin(1);
-    Wallet.tambahXP(2);
+    Wallet.tambahXP(1);
+    Wallet.tambahIDR(10);
 
-    // Putar suara bayi
-    const laughSound = document.getElementById("laugh-sound");
-    if (laughSound) {
-      laughSound.currentTime = 0;
-      laughSound.play().catch(() => {});
+    Game.animasiKoin(event.clientX, event.clientY);
+    Game.putarSuara("coin-sound");
+  },
+
+  animasiKoin(x, y) {
+    const koin = document.createElement("div");
+    koin.className = "coin";
+    koin.textContent = "+1 💰";
+    koin.style.left = `${x}px`;
+    koin.style.top = `${y}px`;
+
+    document.getElementById("coin-animation-wrapper").appendChild(koin);
+
+    setTimeout(() => koin.remove(), 1000);
+  },
+
+  putarSuara(id) {
+    const audio = document.getElementById(id);
+    if (audio) {
+      audio.currentTime = 0;
+      audio.play();
     }
-
-    // Tampilkan animasi koin
-    Game.tampilkanAnimasiKoin(event.clientX, event.clientY);
   },
 
-  // Animasi koin dari posisi tap
-  tampilkanAnimasiKoin: (x, y) => {
-    const coin = document.createElement("div");
-    coin.className = "coin";
-    coin.textContent = "💰";
-    coin.style.left = x + "px";
-    coin.style.top = y + "px";
-
-    const wrapper = document.getElementById("coin-animation-wrapper");
-    wrapper.appendChild(coin);
-
-    setTimeout(() => {
-      coin.remove();
-    }, 1000);
-  },
-
-  // Fitur bonus bagikan (dummy)
-  bagiKoin: () => {
-    alert("🎁 Kamu dapat 5 koin dari berbagi!");
-    Wallet.tambahKoin(5);
-  },
-
-  // Fitur putar dadu (dummy)
-  putarDadu: () => {
+  // Fitur bonus dari dadu
+  putarDadu() {
     const hasil = Math.floor(Math.random() * 6) + 1;
-    alert(`🎲 Kamu dapat angka ${hasil}!\n+${hasil} koin`);
-    Wallet.tambahKoin(hasil);
+    const bonus = hasil * 5;
+
+    Wallet.tambahKoin(bonus);
+    Wallet.tambahXP(hasil);
+    Wallet.tambahIDR(bonus * 3);
+
+    Game.tampilkanBonus(`🎲 Dadu: ${hasil} → +${bonus} Koin`);
+    Game.putarSuara("laugh-sound");
+  },
+
+  // Fitur bonus berbagi
+  bagiKoin() {
+    const bonus = 20;
+    Wallet.tambahKoin(bonus);
+    Wallet.tambahIDR(bonus * 2);
+    Wallet.tambahXP(3);
+
+    Game.tampilkanBonus(`🔄 Berbagi → +${bonus} Koin!`);
+  },
+
+  tampilkanBonus(teks) {
+    const popup = document.getElementById("bonus-popup");
+    if (popup) {
+      popup.textContent = teks;
+      popup.classList.add("show");
+      setTimeout(() => popup.classList.remove("show"), 1800);
+    }
   }
 };
