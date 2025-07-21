@@ -1,27 +1,30 @@
-// auth.js
-
 const Auth = {
-  cekLoginOtomatis() {
+  cekLoginOtomatis: () => {
     const nama = localStorage.getItem("nama");
     if (nama) {
-      document.getElementById("login-form").style.display = "none";
-      document.getElementById("user-name").textContent = nama;
-      Wallet.loadDariBackend(nama); // Ambil data dari server
+      Auth.login(nama);
     } else {
       document.getElementById("login-form").style.display = "block";
     }
   },
 
-  loginManual() {
-    const nama = document.getElementById("input-name").value.trim();
-    if (!nama) return alert("Masukkan nama dulu");
-
+  login: (nama) => {
     localStorage.setItem("nama", nama);
     document.getElementById("user-name").textContent = nama;
     document.getElementById("login-form").style.display = "none";
-    Wallet.loadDariBackend(nama); // Ambil data dari server
+
+    Wallet.tampilkan();
+    Wallet.simpanKeServer(); // ⬅️ Sinkron otomatis saat login
   }
 };
 
 // Event listener untuk tombol login
-document.getElementById("submit-name").addEventListener("click", Auth.loginManual);
+document.addEventListener("DOMContentLoaded", () => {
+  const submit = document.getElementById("submit-name");
+  if (submit) {
+    submit.addEventListener("click", () => {
+      const nama = document.getElementById("input-name").value.trim();
+      if (nama) Auth.login(nama);
+    });
+  }
+});
