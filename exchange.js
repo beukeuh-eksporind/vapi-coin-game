@@ -1,6 +1,7 @@
 const Exchange = {
-  // Menampilkan form penarikan
   tampilkanFormTukar() {
+    console.log("Form penarikan dipanggil");
+
     const idr = Wallet.ambilIDR();
     const batasMinimal = 1000;
 
@@ -19,7 +20,6 @@ const Exchange = {
       return;
     }
 
-    // Kirim ke Google Sheets
     Exchange.kirimPenarikan({ nama, metode, namaRek, noRek });
   },
 
@@ -43,7 +43,7 @@ const Exchange = {
     .then(res => {
       if (res === "OK") {
         alert("✅ Penarikan berhasil diajukan!\nTunggu beberapa menit.");
-        Wallet.resetIDR(); // reset saldo
+        Wallet.resetIDR();
       } else {
         alert("❌ Gagal mengirim data. Coba lagi.");
       }
@@ -54,3 +54,6 @@ const Exchange = {
     });
   }
 };
+
+// Pastikan global
+window.Exchange = Exchange;
